@@ -5,14 +5,12 @@
 <meta name="theme-color" content="#2563eb">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="apple-touch-icon" href="icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="BOM Req">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{--bg:#f8fafc;--card:#fff;--bd:#e2e8f0;--bd2:#cbd5e1;--tx:#0f172a;--tx2:#475569;--tx3:#94a3b8;--ac:#2563eb;--ac2:#1d4ed8;--acbg:#eff6ff;--ok:#059669;--okbg:#ecfdf5;--wn:#d97706;--wnbg:#fffbeb;--er:#dc2626;--erbg:#fef2f2;--sh:0 1px 2px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.06)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--tx);font-size:13px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .login-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#eff6ff,#f8fafc 40%,#e0e7ff);z-index:1000}
 .login-card{background:#fff;border-radius:16px;padding:44px 40px 32px;width:420px;max-width:100%;box-shadow:0 20px 60px rgba(30,58,138,.12);text-align:center}
 .login-logo{width:80px;height:80px;margin:0 auto 18px;display:block}
@@ -33,11 +31,10 @@ header .logo{width:32px;height:32px}
 header h1{font-size:15px;font-weight:600}
 header .spacer{flex:1}
 header .user-info{display:flex;align-items:center;gap:10px}
-header .user-chip{display:inline-flex;align-items:center;gap:6px;background:var(--acbg);color:var(--ac);padding:4px 10px;border-radius:14px;font-weight:600;font-size:11.5px}
+header .user-chip{display:inline-flex;background:var(--acbg);color:var(--ac);padding:4px 10px;border-radius:14px;font-weight:600;font-size:11.5px}
 header .logout-btn{background:transparent;border:1px solid var(--bd);color:var(--tx2);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11.5px;font-family:inherit}
 header .logout-btn:hover{background:var(--erbg);color:var(--er);border-color:#fecaca}
-header .install-btn{background:var(--ok);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11.5px;font-weight:500;font-family:inherit;display:none;transition:.15s}
-header .install-btn:hover{background:#047857}
+header .install-btn{background:var(--ok);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:11.5px;font-weight:500;font-family:inherit;display:none}
 nav{background:var(--card);border-bottom:1px solid var(--bd);padding:0 32px;display:flex;gap:2px;overflow-x:auto;position:sticky;top:61px;z-index:49}
 nav button{background:transparent;border:none;padding:11px 14px;color:var(--tx2);cursor:pointer;border-bottom:2px solid transparent;font-size:13px;font-weight:500;white-space:nowrap;font-family:inherit;display:flex;align-items:center;gap:6px}
 nav button.active{color:var(--ac);border-bottom-color:var(--ac)}
@@ -45,8 +42,7 @@ nav button .num{display:inline-flex;width:18px;height:18px;background:var(--bd);
 nav button.active .num{background:var(--ac);color:#fff}
 nav button .badge{background:var(--er);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:600}
 main{padding:24px 32px;max-width:100%;margin:0 auto}
-.tab{display:none}
-.tab.active{display:block}
+.tab{display:none}.tab.active{display:block}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:20px;box-shadow:var(--sh);margin-bottom:16px}
 h2{font-size:15px;font-weight:600;margin-bottom:4px}
 .hint{color:var(--tx3);font-size:11.5px;margin-bottom:12px;line-height:1.6}
@@ -82,8 +78,6 @@ h2{font-size:15px;font-weight:600;margin-bottom:4px}
 .grid-table td.num{text-align:right;font-variant-numeric:tabular-nums;font-family:ui-monospace,monospace;font-size:11.5px}
 .grid-table tbody tr:hover td.rownum{background:var(--acbg);color:var(--ac);font-weight:600}
 .grid-table tbody tr:hover td:not(.rownum):not(.actions){background:#fafbfc}
-.cell-flash{animation:flash .8s ease}
-@keyframes flash{0%,15%{background:var(--acbg)!important}100%{background:transparent}}
 .btn{display:inline-flex;align-items:center;gap:6px;background:var(--ac);color:#fff;border:none;padding:8px 14px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;white-space:nowrap}
 .btn:hover{background:var(--ac2)}
 .btn.sec{background:var(--card);color:var(--tx2);border:1px solid var(--bd)}
@@ -91,25 +85,19 @@ h2{font-size:15px;font-weight:600;margin-bottom:4px}
 .btn.sm{padding:5px 10px;font-size:11px}
 .btn.ok{background:var(--ok)}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.drop-zone{border:2px dashed var(--bd2);border-radius:10px;padding:22px 20px;text-align:center;color:var(--tx2);cursor:pointer;background:var(--bg);margin-bottom:14px}
+.drop-zone{border:2px dashed var(--bd2);border-radius:10px;padding:12px 16px;text-align:left;color:var(--tx2);cursor:pointer;background:var(--bg);margin-bottom:14px;display:flex;align-items:center;gap:12px}
 .drop-zone:hover,.drop-zone.drag{border-color:var(--ac);background:var(--acbg);color:var(--ac)}
-.drop-zone .icon{font-size:26px;margin-bottom:6px;display:block}
-.drop-zone .title{font-weight:500;font-size:13px;margin-bottom:3px}
+.drop-zone .icon{font-size:20px}
+.drop-zone .title{font-weight:500;font-size:12px}
 .drop-zone .sub{font-size:11px;color:var(--tx3)}
-.drop-zone.compact{padding:12px 16px;display:flex;align-items:center;gap:12px;text-align:left}
-.drop-zone.compact .icon{margin:0;font-size:20px}
-.drop-zone.compact .title{font-size:12px;margin:0}
-.drop-zone.compact .sub{font-size:11px}
 table{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;background:var(--card);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
 th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--bd);vertical-align:top}
 th{background:var(--bg);color:var(--tx2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2}
 tbody tr:hover td{background:#fafbfc}
 tbody tr:last-child td{border-bottom:none}
 td.num{text-align:right;font-variant-numeric:tabular-nums;font-family:ui-monospace,monospace;font-size:11.5px}
-.table-wrap{max-height:calc(100vh - 340px);overflow:auto;border-radius:8px}
-.summary{background:var(--okbg);border:1px solid #a7f3d0;color:#065f46;padding:10px 14px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;margin:10px 0}
-.summary.err{background:var(--erbg);border-color:#fecaca;color:#991b1b}
-.summary.wn{background:var(--wnbg);border-color:#fde68a;color:#92400e}
+.table-wrap{max-height:calc(100vh - 380px);overflow:auto;border-radius:8px}
+.summary{background:var(--okbg);border:1px solid #a7f3d0;color:#065f46;padding:10px 14px;border-radius:8px;font-size:12px;margin:10px 0}
 .warn{padding:9px 12px;border-radius:7px;margin:6px 0;font-size:12px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
 .warn.error{background:var(--erbg);color:#991b1b;border:1px solid #fecaca;border-left:3px solid var(--er)}
 .warn.warning{background:var(--wnbg);color:#92400e;border:1px solid #fde68a;border-left:3px solid var(--wn)}
@@ -181,7 +169,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
     <div class="gh-input-row"><input type="url" id="ghUrl" placeholder="https://raw.githubusercontent.com/user/repo/main/bom.csv"><button class="btn" onclick="loadFromGitHubUrl()">Load from GitHub</button></div>
     <div class="gh-hint">Paste a raw URL or github.com blob URL. On GitHub Pages, <code>./bom.csv</code> and <code>./bom.xlsx</code> auto-load on first visit.</div>
   </div>
-  <div class="drop-zone compact" id="bomDrop"><span class="icon">📄</span><div style="flex:1"><div class="title">Or upload BOM file / click</div><div class="sub">.csv / .xlsx / .xls</div></div></div>
+  <div class="drop-zone" id="bomDrop"><span class="icon">📄</span><div><div class="title">Or upload BOM file / click</div><div class="sub">.csv / .xlsx / .xls</div></div></div>
   <input type="file" id="bomFile" accept=".csv,.xlsx,.xls" style="display:none">
   <div class="grid-toolbar"><button class="btn sec sm" onclick="addBomRow()">+ Add row</button><button class="btn sec sm" onclick="clearBomGrid()">Clear all</button><span class="count" id="bomCount">0 rows</span></div>
   <div class="grid-wrap"><table class="grid-table" id="bomGridTable">
@@ -197,7 +185,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 <div class="card">
   <h2>Planning Data</h2>
   <p class="hint">Paste rows (Tab-separated). No header needed. <strong>Machine Name</strong> is the last column. Inner-family stages require Material.</p>
-  <div class="drop-zone compact" id="planDrop"><span class="icon">📋</span><div style="flex:1"><div class="title">Drop planning file or click</div><div class="sub">.csv / .xlsx / .xls</div></div></div>
+  <div class="drop-zone" id="planDrop"><span class="icon">📋</span><div><div class="title">Drop planning file or click</div><div class="sub">.csv / .xlsx / .xls</div></div></div>
   <input type="file" id="planFile" accept=".csv,.xlsx,.xls" style="display:none">
   <div class="grid-toolbar"><button class="btn sec sm" onclick="addPlanRow()">+ Add row</button><button class="btn sec sm" onclick="clearPlanGrid()">Clear all</button><span class="count" id="planCount">0 rows</span></div>
   <div class="grid-wrap"><table class="grid-table" id="planGridTable">
@@ -212,18 +200,18 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 <section id="stages" class="tab">
 <div class="card">
   <h2>Stage Filter</h2>
-  <p class="hint">Uncheck to exclude. <strong>PACKING</strong> always excluded. Families auto-expand.</p>
+  <p class="hint">Uncheck to exclude. PACKING always excluded. Families auto-expand.</p>
   <div id="stageList" class="stage-list"><div class="empty"><span class="icon">⚙️</span>Load BOM first</div></div>
   <details><summary>▸ Family mapping</summary><div class="family-grid">
     <div class="family-card"><h4>Laying</h4><code>INDIVIDUAL SHIELDING-TP*</code><code>OVERALL SHIELDING-TP*</code><code>TAPE OVER LAY</code><code>TAPE OVER SHIELD*</code></div>
     <div class="family-card"><h4>Braiding</h4><code>BRD *</code><code>BRD-*</code><code>BRD_*</code></div>
     <div class="family-card"><h4>Armoring</h4><code>ARMORING</code><code>ARMOURING</code><code>TAPE OVER ARMOR*</code> · triggers: armor / armour / armoring / armouring</div>
-    <div class="family-card"><h4>Inner Sheath family</h4><code>INNER SHEATH</code><code>ADDITIONAL INNER SHEATH</code><code>INNER SHEATH 2</code><code>ARMOR BEDDING</code> · trigger words: inner, inner sheath</div>
-    <div class="family-card"><h4>Outer Sheath</h4><code>OUTER SHEATH</code> · trigger words: outer, outer sheath</div>
+    <div class="family-card"><h4>Inner Sheath</h4><code>INNER SHEATH</code><code>ADDITIONAL INNER SHEATH</code><code>INNER SHEATH 2</code><code>ARMOR BEDDING</code> · triggers: inner, inner sheath</div>
+    <div class="family-card"><h4>Outer Sheath</h4><code>OUTER SHEATH</code> · triggers: outer, outer sheath</div>
     <div class="family-card"><h4>Final Inner</h4><code>ARMOR BEDDING</code> only · warn if material ≠ zerohalogen</div>
     <div class="family-card"><h4>HDPE on sheath layer</h4>Inner Sheath or Additional Inner Sheath with HDPE → also pulls <code>TAPE OVER LAY</code></div>
   </div></details>
-  <details><summary>▸ Material synonyms (edit to add your own)</summary>
+  <details><summary>▸ Material synonyms</summary>
     <p class="hint">Key = what you type in planning Material. Value = substrings matched against BOM MATERIAL DISC.</p>
     <textarea id="synEditor" style="min-height:220px"></textarea>
     <div class="btn-row"><button class="btn sm" onclick="saveSynonyms()">Save</button><button class="btn sec sm" onclick="resetSynonyms()">Reset</button><span class="count" id="synStatus"></span></div>
@@ -241,8 +229,17 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 <section id="total" class="tab">
 <div class="card">
   <h2>Daily Total BOM</h2>
-  <p class="hint">Aggregated per material. Duplicates summed.</p>
-  <div class="btn-row no-print"><button class="btn sec sm" onclick="exportTotal()">⬇ Export CSV</button><button class="btn sec sm" onclick="window.print()">🖨 Print</button></div>
+  <p class="hint">Aggregated per material. Filters recompute totals live.</p>
+  <div class="filter-bar no-print">
+    <span class="flabel">Filter</span>
+    <input type="text" id="tSearch" placeholder="Search material, colour, job, stage…" oninput="renderTotal()">
+    <select id="tStage" onchange="renderTotal()"><option value="">All stages</option></select>
+    <select id="tMachine" onchange="renderTotal()"><option value="">All machines</option></select>
+    <select id="tJob" onchange="renderTotal()"><option value="">All jobs</option></select>
+    <button class="btn sec sm" onclick="clearTotalFilters()">Clear</button>
+    <span class="fcount" id="tCount"></span>
+  </div>
+  <div class="btn-row no-print"><button class="btn sec sm" onclick="exportTotal()">⬇ Export CSV (filtered)</button><button class="btn sec sm" onclick="window.print()">🖨 Print</button></div>
   <div id="totalOut"><div class="empty"><span class="icon">📊</span>Run Generate first</div></div>
 </div>
 </section>
@@ -277,12 +274,14 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 </div>
 
 <script>
+/* AUTH */
 const USERS={'manikanta':'manikanta@tcl','rasheed':'rasheed@tcl','rakesh':'rakesh@tcl','admin':'admin@tcl'};
 function getSession(){try{const s=JSON.parse(localStorage.getItem('bomreq.session')||'null');if(s&&s.exp>Date.now()&&USERS[s.user])return s;if(s)localStorage.removeItem('bomreq.session')}catch(e){}return null}
 function handleLogin(e){e.preventDefault();const u=document.getElementById('loginUser').value.trim().toLowerCase(),p=document.getElementById('loginPass').value;if(!USERS[u]||USERS[u]!==p){const err=document.getElementById('loginError');err.textContent='Invalid username or password';err.classList.add('show');document.getElementById('loginPass').value='';setTimeout(()=>err.classList.remove('show'),3000);return}localStorage.setItem('bomreq.session',JSON.stringify({user:u,exp:Date.now()+30*24*60*60*1000}));showApp(u)}
 function logout(){if(!confirm('Sign out?'))return;localStorage.removeItem('bomreq.session');location.reload()}
 function showApp(user){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';document.getElementById('userChip').textContent=user;initApp()}
 
+/* PWA */
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;const b=document.getElementById('installBtn');if(b)b.style.display='inline-flex'});
 function installApp(){if(!deferredPrompt){toast('Use browser menu → Install app','err');return}deferredPrompt.prompt();deferredPrompt.userChoice.then(c=>{if(c.outcome==='accepted')document.getElementById('installBtn').style.display='none';deferredPrompt=null})}
@@ -290,7 +289,8 @@ if('serviceWorker'in navigator){window.addEventListener('load',()=>{navigator.se
 
 function toast(msg,type){const t=document.createElement('div');t.className='toast '+(type||'');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
 
-let S={total:[],detail:[],warns:[]};
+/* STATE */
+let S={detail:[],warns:[]};
 const LS_PLAN='bomreq.plangrid',LS_BOM='bomreq.bomgrid',LS_STG='bomreq.stages';
 let INITED=false;
 
@@ -316,13 +316,13 @@ function isArmoringStage(s){return /^armou?r(ing)?$/i.test(s)||/^tape\s*over\s*a
 function isArmorBedding(s){return /^armou?r\s*bedding/i.test(s)}
 function isFinalInnerTrigger(pn){return /^final\s*inner(\s*sheath)?$/i.test(pn)}
 
+/* NAV */
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));
 function go(t){document.querySelectorAll('nav button,.tab').forEach(x=>x.classList.remove('active'));document.querySelector(`nav button[data-t="${t}"]`).classList.add('active');document.getElementById(t).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
 document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey){const k=e.key;if(k>='1'&&k<='6'){e.preventDefault();go(['setup','plan','stages','total','detail','warns'][+k-1])}else if(k.toLowerCase()==='g'){e.preventDefault();generate()}else if(k.toLowerCase()==='e'){e.preventDefault();const a=document.querySelector('.tab.active').id;if(a==='total')exportTotal();else if(a==='detail')exportDetail()}}});
 
 function hasContent(tr){return Array.from(tr.querySelectorAll('td[contenteditable]')).some(c=>c.textContent.trim())}
 function navKey(e,td,addRowFn){if(e.key==='Tab'){e.preventDefault();const tr=td.closest('tr'),cells=Array.from(tr.querySelectorAll('td[contenteditable]')),i=cells.indexOf(td);if(i<cells.length-1){cells[i+1].focus()}else{let next=tr.nextElementSibling;if(!next)next=addRowFn();next.querySelector('td[contenteditable]').focus()}}else if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();const tr=td.closest('tr'),i=Array.from(tr.querySelectorAll('td[contenteditable]')).indexOf(td);let next=tr.nextElementSibling;if(!next)next=addRowFn();const nc=next.querySelectorAll('td[contenteditable]');if(nc[i])nc[i].focus()}}
-function flashCells(bodyId,start,count){const body=document.getElementById(bodyId);for(let i=start;i<start+count&&i<body.children.length;i++){body.children[i].querySelectorAll('td[contenteditable]').forEach(td=>{td.classList.add('cell-flash');setTimeout(()=>td.classList.remove('cell-flash'),900)})}}
 
 /* PLANNING GRID */
 const PLAN_COLS=[{ph:'Inner / Inner Sheath / Additional Inner Sheath / Outer / Outer Sheath / Armor / Armoring / Laying / Braiding / Final Inner'},{ph:'338371'},{ph:'ABC Company'},{ph:'1-27'},{ph:'3CX2.5 SQ.MM ARM CABLE'},{ph:'3000',num:true},{ph:'nylon / zerohalogen / HDPE'},{ph:'Red'},{ph:'Machine 1'}];
@@ -335,7 +335,7 @@ function initPlanGrid(){document.getElementById('planGridBody').innerHTML='';for
 function restorePlan(){try{const s=localStorage.getItem(LS_PLAN);if(!s){initPlanGrid();return}const rows=JSON.parse(s);const body=document.getElementById('planGridBody');body.innerHTML='';if(!rows.length){for(let i=0;i<3;i++)addPlanRow()}else{rows.forEach(r=>addPlanRow(r));addPlanRow()}renumberPlan();updatePlanCount()}catch(e){initPlanGrid()}}
 function getPlanData(){const body=document.getElementById('planGridBody');const out=[];Array.from(body.children).forEach((tr,i)=>{if(!hasContent(tr))return;const c=Array.from(tr.querySelectorAll('td[contenteditable]')).map(x=>x.textContent.trim());const item=c[3]||'';out.push({rowNum:i+1,stage:c[0]||'',job:c[1]||'',customer:c[2]||'',item,itemPrefix:item.split('-')[0].trim(),desc:c[4]||'',qty:parseFloat(c[5])||0,material:c[6]||'',colour:c[7]||'',machine:c[8]||''})});return out}
 document.getElementById('planGridTable').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!t)return;e.preventDefault();pastePlan(t)});
-function pastePlan(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));if(rows.length&&isPlanHeader(rows[0]))rows.shift();if(!rows.length)return;const body=document.getElementById('planGridBody');body.innerHTML='';rows.forEach(r=>addPlanRow(r));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();flashCells('planGridBody',0,rows.length);document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Pasted ${rows.length} planning rows</div>`}
+function pastePlan(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));if(rows.length&&isPlanHeader(rows[0]))rows.shift();if(!rows.length)return;const body=document.getElementById('planGridBody');body.innerHTML='';rows.forEach(r=>addPlanRow(r));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Pasted ${rows.length} planning rows</div>`}
 function isPlanHeader(r){if(!r)return false;return /^stage$/i.test((r[0]||'').trim())&&r.some(c=>/job|item|qty|planned/i.test(c||''))}
 
 /* BOM GRID */
@@ -349,14 +349,14 @@ function initBomGrid(){document.getElementById('bomGridBody').innerHTML='';for(l
 function restoreBom(){try{const s=localStorage.getItem(LS_BOM);if(!s){initBomGrid();refreshStages();return}const rows=JSON.parse(s);const body=document.getElementById('bomGridBody');body.innerHTML='';if(!rows.length){for(let i=0;i<2;i++)addBomRow()}else{rows.forEach(r=>addBomRow(r));addBomRow()}renumberBom();updateBomCount();refreshStages()}catch(e){initBomGrid();refreshStages()}}
 function getBomData(){const body=document.getElementById('bomGridBody');const out=[];Array.from(body.children).forEach(tr=>{if(!hasContent(tr))return;const c=Array.from(tr.querySelectorAll('td[contenteditable]')).map(x=>x.textContent.trim());const rate=parseFloat(c[3]);if(!c[0]||!c[1]||!c[2]||isNaN(rate))return;out.push({job:c[0],item:c[1],stage:c[2],stageNorm:nStage(c[2]),rate,matCode:c[4]||'',material:c[5]||'',matDesc:c[6]||'',colour:c[7]||''})});return out}
 document.getElementById('bomGridTable').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!t)return;e.preventDefault();pasteBom(t)});
-function pasteBom(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));const h=rows[0]||[];const map={job:idxOf(h,['sales order']),item:idxOf(h,['item']),stage:idxOf(h,['operation jdm']),rate:idxOf(h,['bom/km - jdm','bom/km']),matCode:idxOf(h,['material code']),material:idxOf(h,['material disc']),matDesc:idxOf(h,['size']),colour:idxOf(h,['colour','color'])};if(map.job<0||map.item<0||map.stage<0||map.rate<0)return alert('BOM paste needs header:\nSALES ORDER · ITEM · OPERATION JDM · BOM/KM - JDM');rows.shift();const dataRows=rows.filter(r=>r.some(c=>c&&c.toString().trim())).map(r=>[r[map.job]||'',r[map.item]||'',r[map.stage]||'',r[map.rate]||'',map.matCode>=0?(r[map.matCode]||''):'',map.material>=0?(r[map.material]||''):'',map.matDesc>=0?(r[map.matDesc]||''):'',map.colour>=0?(r[map.colour]||''):'']);if(!dataRows.length)return alert('No data rows');const body=document.getElementById('bomGridBody');body.innerHTML='';dataRows.forEach(r=>addBomRow(r));addBomRow();renumberBom();updateBomCount();saveBomToStorage();refreshStages();flashCells('bomGridBody',0,dataRows.length);document.getElementById('bomStatus').innerHTML=`<div class="summary">✅ Parsed ${dataRows.length} BOM rows</div>`}
+function pasteBom(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));const h=rows[0]||[];const map={job:idxOf(h,['sales order']),item:idxOf(h,['item']),stage:idxOf(h,['operation jdm']),rate:idxOf(h,['bom/km - jdm','bom/km']),matCode:idxOf(h,['material code']),material:idxOf(h,['material disc']),matDesc:idxOf(h,['size']),colour:idxOf(h,['colour','color'])};if(map.job<0||map.item<0||map.stage<0||map.rate<0)return alert('BOM paste needs header:\nSALES ORDER · ITEM · OPERATION JDM · BOM/KM - JDM');rows.shift();const dataRows=rows.filter(r=>r.some(c=>c&&c.toString().trim())).map(r=>[r[map.job]||'',r[map.item]||'',r[map.stage]||'',r[map.rate]||'',map.matCode>=0?(r[map.matCode]||''):'',map.material>=0?(r[map.material]||''):'',map.matDesc>=0?(r[map.matDesc]||''):'',map.colour>=0?(r[map.colour]||''):'']);if(!dataRows.length)return alert('No data rows');const body=document.getElementById('bomGridBody');body.innerHTML='';dataRows.forEach(r=>addBomRow(r));addBomRow();renumberBom();updateBomCount();saveBomToStorage();refreshStages();document.getElementById('bomStatus').innerHTML=`<div class="summary">✅ Parsed ${dataRows.length} BOM rows</div>`}
 function idxOf(h,pats){for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x===p))return i}for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x.includes(p)))return i}return -1}
 
 /* FILE + GITHUB */
 function wireDrop(zoneId,inputId,handler){const z=document.getElementById(zoneId),i=document.getElementById(inputId);z.onclick=()=>i.click();z.ondragover=e=>{e.preventDefault();z.classList.add('drag')};z.ondragleave=()=>z.classList.remove('drag');z.ondrop=e=>{e.preventDefault();z.classList.remove('drag');if(e.dataTransfer.files.length)readFile(e.dataTransfer.files[0],handler)};i.onchange=e=>{if(e.target.files[0])readFile(e.target.files[0],handler);i.value=''}}
 async function readFile(f,handler){if(f.name.toLowerCase().endsWith('.csv')){handler(parseDelim(await f.text()))}else{const b=await f.arrayBuffer();const wb=XLSX.read(b,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handler(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}}
 function handleBomFile(rows){if(!rows.length)return alert('Empty file');const tsv=rows.map(r=>r.map(c=>(c==null?'':String(c))).join('\t')).join('\n');pasteBom(tsv)}
-function handlePlanFile(rows){if(!rows.length)return alert('Empty file');let data=rows;if(isPlanHeader(rows[0]))data=rows.slice(1);const body=document.getElementById('planGridBody');body.innerHTML='';data.forEach(r=>addPlanRow(r.map(c=>c==null?'':String(c))));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();flashCells('planGridBody',0,data.length);document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Loaded ${data.length} planning rows</div>`}
+function handlePlanFile(rows){if(!rows.length)return alert('Empty file');let data=rows;if(isPlanHeader(rows[0]))data=rows.slice(1);const body=document.getElementById('planGridBody');body.innerHTML='';data.forEach(r=>addPlanRow(r.map(c=>c==null?'':String(c))));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Loaded ${data.length} planning rows</div>`}
 function toRawUrl(u){u=u.trim();if(u.includes('raw.githubusercontent.com'))return u;const m=u.match(/^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/(?:blob|raw)\/(.+)$/);if(m)return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}`;return u}
 async function loadFromGitHubUrl(){const url=toRawUrl(document.getElementById('ghUrl').value);if(!url)return alert('Paste GitHub URL');try{toast('Fetching...');const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);if(url.toLowerCase().includes('.csv')){handleBomFile(parseDelim(await res.text()))}else{const buf=await res.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handleBomFile(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}toast('✅ BOM loaded','ok')}catch(e){toast('Failed: '+e.message,'err')}}
 async function tryAutoLoadRepoBom(){if(localStorage.getItem(LS_BOM))return;const cands=['bom.csv','bom.xlsx','bom.xls','BOM.csv','BOM.xlsx'];for(const f of cands){try{const head=await fetch(f,{method:'HEAD'});if(!head.ok)continue;const res=await fetch(f);if(!res.ok)continue;if(f.toLowerCase().endsWith('.csv')){handleBomFile(parseDelim(await res.text()))}else{const buf=await res.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handleBomFile(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}toast('✅ Auto-loaded BOM','ok');return}catch(e){}}}
@@ -376,17 +376,16 @@ function resetSynonyms(){if(!confirm('Reset synonyms?'))return;SYNONYMS={...DEFA
 
 /* RESOLVE */
 function resolvePlanRow(pr,pn,cands){
-  // Stage aliases
   if(pn==='inner')pn='inner sheath';
   else if(pn==='outer')pn='outer sheath';
   if(isFinalInnerTrigger(pn)){
     const mat=(pr.material||'').trim(),syns=expandSynonyms(mat),isZero=isZeroHalogenSyns(syns);
-    const armorBedding=cands.filter(b=>isArmorBedding(b.stageNorm));
-    const warns=[];
-    if(!mat)warns.push('Final Inner requires Material (zerohalogen expected)');
-    else if(!isZero)warns.push(`Final Inner usually requires zerohalogen — got '${mat}'`);
-    if(!armorBedding.length){warns.push('No ARMOR BEDDING rows');return {stages:[],warning:warns.join('; ')}}
-    return {stages:armorBedding,warning:warns.length?warns.join('; '):null}
+    const ab=cands.filter(b=>isArmorBedding(b.stageNorm));
+    const w=[];
+    if(!mat)w.push('Final Inner requires Material (zerohalogen expected)');
+    else if(!isZero)w.push(`Final Inner usually requires zerohalogen — got '${mat}'`);
+    if(!ab.length){w.push('No ARMOR BEDDING rows');return {stages:[],warning:w.join('; ')}}
+    return {stages:ab,warning:w.length?w.join('; '):null}
   }
   if(isArmoringTrigger(pn)){
     const m=cands.filter(b=>isArmoringStage(b.stageNorm));
@@ -410,10 +409,10 @@ function resolvePlanRow(pr,pn,cands){
     const pool=isGen?cands.filter(b=>isInnerFamilyStage(b.stageNorm)):cands.filter(b=>b.stageNorm===pn);
     if(!pool.length)return {stages:[],warning:'No Inner-family stages'};
     const syns=expandSynonyms(mat);
-    const hitStages=new Set();
-    pool.forEach(b=>{if(matchesMaterial(b.material,syns))hitStages.add(b.stageNorm)});
-    if(!hitStages.size){const w=isGen?'any Inner-family stage':`"${pr.stage}"`;return {stages:[],warning:`Material '${mat}' not found in ${w}`}}
-    const matched=pool.filter(b=>hitStages.has(b.stageNorm));
+    const hit=new Set();
+    pool.forEach(b=>{if(matchesMaterial(b.material,syns))hit.add(b.stageNorm)});
+    if(!hit.size){const w=isGen?'any Inner-family stage':`"${pr.stage}"`;return {stages:[],warning:`Material '${mat}' not found in ${w}`}}
+    const matched=pool.filter(b=>hit.has(b.stageNorm));
     if(isSheathLayerStage(pn)&&isHDPEMaterial(mat)){
       const tol=cands.filter(b=>/^tape\s*over\s*lay$/i.test(b.stageNorm));
       if(tol.length)return {stages:[...matched,...tol]};
@@ -435,7 +434,7 @@ function generate(){
   const bom=getBomData(),plan=getPlanData();
   if(!bom.length)return alert('Load BOM first');
   if(!plan.length)return alert('Add planning rows first');
-  const ok=selectedStages(),total={},detail=[],warns=[];let seq=0;
+  const ok=selectedStages(),detail=[],warns=[];let seq=0;
   plan.forEach(pr=>{
     seq++;
     if(!pr.qty||pr.qty<=0)warns.push({level:'warning',msg:`Row ${pr.rowNum}: Qty is 0`});
@@ -450,41 +449,75 @@ function generate(){
     matched.forEach(b=>{
       const req=pr.qty*b.rate/1000;
       detail.push({seq,job:pr.job,item:pr.item,planStage:pr.stage,qty:pr.qty,bomStage:b.stage,material:b.material,colour:b.colour,matCode:b.matCode,matDesc:b.matDesc,rate:b.rate,required:req,machine:pr.machine||''});
-      const k=b.material+'|'+b.colour;
-      if(!total[k])total[k]={material:b.material,colour:b.colour,qty:0,jobs:new Set(),stages:new Set()};
-      total[k].qty+=req;total[k].jobs.add(pr.job);total[k].stages.add(b.stage);
     });
   });
   const byJI={};plan.forEach(pr=>{const k=pr.job+'|'+pr.itemPrefix;if(!byJI[k])byJI[k]=new Set();byJI[k].add(nStage(pr.stage))});
   Object.entries(byJI).forEach(([k,st])=>{if(st.has('inner sheath')&&(st.has('armor bedding')||st.has('armour bedding'))){const[j,i]=k.split('|');warns.push({level:'warning',msg:`Job ${j}/Item ${i}: Inner + Armor Bedding both present — possible double-count`})}});
-  S.total=Object.values(total).map(t=>({material:t.material,colour:t.colour,qty:t.qty,jobs:[...t.jobs].join(', '),stages:[...t.stages].join(', ')})).sort((a,b)=>a.material.localeCompare(b.material));
   S.detail=detail;S.warns=warns;
   renderTotal();renderDetail();renderWarns();
-  document.getElementById('genStatus').innerHTML=`<div class="summary">✅ ${detail.length} detail rows · ${S.total.length} materials${warns.length?` · ${warns.length} warnings`:''}</div>`;
+  document.getElementById('genStatus').innerHTML=`<div class="summary">✅ ${detail.length} detail rows${warns.length?` · ${warns.length} warnings`:''}</div>`;
   const b=document.getElementById('warnBadge');if(warns.length){b.textContent=warns.length;b.style.display='inline'}else b.style.display='none';
   go('total')
 }
 
-function renderTotal(){const el=document.getElementById('totalOut');if(!S.total.length){el.innerHTML='<div class="empty"><span class="icon">📊</span>Run Generate first</div>';return}el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th>Jobs</th><th>Stages</th></tr></thead><tbody>${S.total.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td>${esc(t.jobs)}</td><td>${esc(t.stages)}</td></tr>`).join('')}</tbody></table></div>`}
-
-function populateFilterDropdowns(){
-  const machSel=document.getElementById('fMachine').value,matSel=document.getElementById('fMaterial').value,stgSel=document.getElementById('fStage').value;
-  const machines=[...new Set(S.detail.map(d=>d.machine).filter(Boolean))].sort();
-  const materials=[...new Set(S.detail.map(d=>d.material).filter(Boolean))].sort();
+/* DAILY TOTAL with filters */
+function populateTotalDropdowns(){
+  const sSel=document.getElementById('tStage').value,mSel=document.getElementById('tMachine').value,jSel=document.getElementById('tJob').value;
   const stages=[...new Set(S.detail.map(d=>d.bomStage).filter(Boolean))].sort();
-  document.getElementById('fMachine').innerHTML='<option value="">All machines</option>'+machines.map(m=>`<option${m===machSel?' selected':''}>${esc(m)}</option>`).join('');
-  document.getElementById('fMaterial').innerHTML='<option value="">All materials</option>'+materials.map(m=>`<option${m===matSel?' selected':''}>${esc(m)}</option>`).join('');
-  document.getElementById('fStage').innerHTML='<option value="">All stages</option>'+stages.map(m=>`<option${m===stgSel?' selected':''}>${esc(m)}</option>`).join('');
+  const machines=[...new Set(S.detail.map(d=>d.machine).filter(Boolean))].sort();
+  const jobs=[...new Set(S.detail.map(d=>d.job).filter(Boolean))].sort();
+  document.getElementById('tStage').innerHTML='<option value="">All stages</option>'+stages.map(x=>`<option${x===sSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('tMachine').innerHTML='<option value="">All machines</option>'+machines.map(x=>`<option${x===mSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('tJob').innerHTML='<option value="">All jobs</option>'+jobs.map(x=>`<option${x===jSel?' selected':''}>${esc(x)}</option>`).join('');
+}
+function getFilteredForTotal(){
+  const s=document.getElementById('tStage').value,m=document.getElementById('tMachine').value,j=document.getElementById('tJob').value;
+  const q=(document.getElementById('tSearch').value||'').toLowerCase().trim();
+  return S.detail.filter(d=>{
+    if(s&&d.bomStage!==s)return false;
+    if(m&&d.machine!==m)return false;
+    if(j&&d.job!==j)return false;
+    if(q){const hay=[d.material,d.colour,d.job,d.bomStage,d.machine,d.matCode,d.matDesc].join(' ').toLowerCase();if(!hay.includes(q))return false}
+    return true;
+  });
+}
+function aggregate(rows){
+  const t={};
+  rows.forEach(d=>{
+    const k=d.material+'|'+(d.colour||'');
+    if(!t[k])t[k]={material:d.material,colour:d.colour||'',qty:0,jobs:new Set(),stages:new Set()};
+    t[k].qty+=d.required;t[k].jobs.add(d.job);t[k].stages.add(d.bomStage);
+  });
+  return Object.values(t).map(x=>({material:x.material,colour:x.colour,qty:x.qty,jobs:[...x.jobs].join(', '),stages:[...x.stages].join(', ')})).sort((a,b)=>a.material.localeCompare(b.material));
+}
+function renderTotal(){
+  const el=document.getElementById('totalOut');
+  if(!S.detail.length){el.innerHTML='<div class="empty"><span class="icon">📊</span>Run Generate first</div>';return}
+  populateTotalDropdowns();
+  const rows=getFilteredForTotal(),agg=aggregate(rows);
+  document.getElementById('tCount').textContent=`${agg.length} material${agg.length===1?'':'s'} · ${rows.length} detail rows`;
+  if(!agg.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No materials match filters</div>';return}
+  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th>Jobs</th><th>Stages</th></tr></thead><tbody>${agg.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td>${esc(t.jobs)}</td><td>${esc(t.stages)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function clearTotalFilters(){['tSearch','tStage','tMachine','tJob'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderTotal()}
+
+/* PER-ROW DETAIL with filters */
+function populateDetailDropdowns(){
+  const sSel=document.getElementById('fStage').value,mSel=document.getElementById('fMaterial').value,machSel=document.getElementById('fMachine').value;
+  const stages=[...new Set(S.detail.map(d=>d.bomStage).filter(Boolean))].sort();
+  const materials=[...new Set(S.detail.map(d=>d.material).filter(Boolean))].sort();
+  const machines=[...new Set(S.detail.map(d=>d.machine).filter(Boolean))].sort();
+  document.getElementById('fStage').innerHTML='<option value="">All stages</option>'+stages.map(x=>`<option${x===sSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('fMaterial').innerHTML='<option value="">All materials</option>'+materials.map(x=>`<option${x===mSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('fMachine').innerHTML='<option value="">All machines</option>'+machines.map(x=>`<option${x===machSel?' selected':''}>${esc(x)}</option>`).join('');
 }
 function getFilteredDetail(){
-  const mach=document.getElementById('fMachine')?document.getElementById('fMachine').value:'';
-  const mat=document.getElementById('fMaterial')?document.getElementById('fMaterial').value:'';
-  const stg=document.getElementById('fStage')?document.getElementById('fStage').value:'';
-  const q=(document.getElementById('fSearch')?document.getElementById('fSearch').value:'').toLowerCase().trim();
+  const s=document.getElementById('fStage').value,m=document.getElementById('fMaterial').value,mach=document.getElementById('fMachine').value;
+  const q=(document.getElementById('fSearch').value||'').toLowerCase().trim();
   return S.detail.filter(d=>{
+    if(s&&d.bomStage!==s)return false;
+    if(m&&d.material!==m)return false;
     if(mach&&d.machine!==mach)return false;
-    if(mat&&d.material!==mat)return false;
-    if(stg&&d.bomStage!==stg)return false;
     if(q){const hay=[d.job,d.item,d.material,d.machine,d.bomStage,d.matDesc,d.planStage,d.colour,d.matCode].join(' ').toLowerCase();if(!hay.includes(q))return false}
     return true;
   });
@@ -492,17 +525,18 @@ function getFilteredDetail(){
 function renderDetail(){
   const el=document.getElementById('detailOut');
   if(!S.detail.length){el.innerHTML='<div class="empty"><span class="icon">📋</span>Run Generate first</div>';return}
-  populateFilterDropdowns();
+  populateDetailDropdowns();
   const rows=getFilteredDetail();
   document.getElementById('fCount').textContent=`${rows.length} of ${S.detail.length} rows`;
   if(!rows.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No rows match filters</div>';return}
   el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>#</th><th>Job</th><th>Item</th><th>Plan Stage</th><th style="text-align:right">Qty (m)</th><th>BOM Stage</th><th>Material</th><th>Colour</th><th>Machine</th><th>Code</th><th>Description</th><th style="text-align:right">Rate</th><th style="text-align:right">Required (kg)</th></tr></thead><tbody>${rows.map(d=>`<tr><td>${d.seq}</td><td>${esc(d.job)}</td><td>${esc(d.item)}</td><td>${esc(d.planStage)}</td><td class="num">${d.qty}</td><td>${esc(d.bomStage)}</td><td>${esc(d.material)}</td><td>${esc(d.colour)||'—'}</td><td>${esc(d.machine)||'—'}</td><td>${esc(d.matCode)}</td><td>${esc(d.matDesc)}</td><td class="num">${d.rate.toFixed(3)}</td><td class="num"><strong>${d.required.toFixed(3)}</strong></td></tr>`).join('')}</tbody></table></div>`;
 }
-function clearFilters(){['fSearch','fMachine','fMaterial','fStage'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderDetail()}
+function clearFilters(){['fSearch','fStage','fMaterial','fMachine'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderDetail()}
+
 function renderWarns(){const el=document.getElementById('warnOut');if(!S.warns.length){el.innerHTML='<div class="empty"><span class="icon">✅</span>No warnings</div>';return}el.innerHTML=S.warns.map(w=>`<div class="warn ${w.level}"><span class="ico">${w.level==='error'?'✕':'!'}</span><span>${esc(w.msg)}</span></div>`).join('')}
 
 function dl(rows,fn){const csv=rows.map(r=>r.map(c=>{const s=(c==null?'':String(c));return(s.includes(',')||s.includes('"')||s.includes('\n'))?'"'+s.replace(/"/g,'""')+'"':s}).join(',')).join('\n');const b=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href)}
-function exportTotal(){if(!S.total.length)return alert('Generate first');dl([['Material','Colour','Qty (kg)','Jobs','Stages'],...S.total.map(t=>[t.material,t.colour,t.qty.toFixed(3),t.jobs,t.stages])],`daily_total_${new Date().toISOString().slice(0,10)}.csv`)}
+function exportTotal(){if(!S.detail.length)return alert('Generate first');const rows=getFilteredForTotal(),agg=aggregate(rows);if(!agg.length)return alert('No rows match');dl([['Material','Colour','Qty (kg)','Jobs','Stages'],...agg.map(t=>[t.material,t.colour,t.qty.toFixed(3),t.jobs,t.stages])],`daily_total_${new Date().toISOString().slice(0,10)}.csv`)}
 function exportDetail(){if(!S.detail.length)return alert('Generate first');const rows=getFilteredDetail();if(!rows.length)return alert('No rows match filter');dl([['#','Job','Item','Plan Stage','Qty','BOM Stage','Material','Colour','Machine','Code','Description','Rate','Required (kg)'],...rows.map(d=>[d.seq,d.job,d.item,d.planStage,d.qty,d.bomStage,d.material,d.colour,d.machine,d.matCode,d.matDesc,d.rate.toFixed(3),d.required.toFixed(3)])],`per_row_detail_${new Date().toISOString().slice(0,10)}.csv`)}
 
 function initApp(){if(INITED)return;INITED=true;wireDrop('bomDrop','bomFile',handleBomFile);wireDrop('planDrop','planFile',handlePlanFile);restoreBom();restorePlan();loadSynEditor();tryAutoLoadRepoBom()}
