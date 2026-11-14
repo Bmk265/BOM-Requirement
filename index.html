@@ -125,7 +125,41 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 .toast{position:fixed;bottom:24px;right:24px;background:var(--tx);color:#fff;padding:12px 18px;border-radius:8px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:2000;max-width:380px}
 .toast.ok{background:var(--ok)}
 .toast.err{background:var(--er)}
-@media print{header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar{display:none!important}body{background:#fff}main{padding:0}.card{box-shadow:none;border:none;padding:0}table{font-size:9px;border:1px solid #ccc}th{background:#f0f0f0!important;color:#000!important;position:static}td{color:#000}.table-wrap{max-height:none;overflow:visible}}
+
+/* ── PRINT HELPERS (screen) ─────────────────────────────── */
+.print-header{display:none}
+.col-codes{display:none}
+
+/* ── PRINT: exact A4 portrait ───────────────────────────── */
+@page { size: A4 portrait; margin: 10mm; }
+
+@media print{
+  header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar{display:none!important}
+  body{background:#fff;font-size:9px}
+  main{padding:0;width:100%}
+  .card{box-shadow:none;border:none;padding:0;margin:0}
+
+  table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:8.5px;
+        -webkit-print-color-adjust:exact;print-color-adjust:exact;
+        border:1px solid #ccc;margin:0}
+  th,td{padding:4px 6px;word-break:break-word;overflow-wrap:anywhere;
+        border:1px solid #ccc;color:#000;vertical-align:top}
+  th{background:#f0f0f0!important;position:static;font-size:8px}
+  tbody tr:hover td{background:transparent!important}
+
+  thead{display:table-header-group}
+  tr{page-break-inside:avoid}
+
+  .table-wrap{max-height:none;overflow:visible;border:none}
+
+  .print-header{display:block;text-align:center;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #000}
+  .print-header .ph-title{font-size:16px;font-weight:700;color:#000}
+  .print-header .ph-sub{font-size:10px;color:#333;margin-top:2px}
+
+  /* Daily Total: swap Jobs → Material Code on paper */
+  .col-jobs{display:none!important}
+  .col-codes{display:table-cell!important}
+}
 </style></head><body>
 
 <div id="loginScreen" class="login-screen">
@@ -159,6 +193,10 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   <button data-t="warns"><span class="num">6</span>Warnings <span class="badge" id="warnBadge" style="display:none">0</span></button>
 </nav>
 <main>
+<div class="print-header" id="printHeader">
+  <div class="ph-title">BOM Requirement</div>
+  <div class="ph-sub" id="phSub"></div>
+</div>
 
 <section id="setup" class="tab active">
 <div class="card">
@@ -239,7 +277,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
     <button class="btn sec sm" onclick="clearTotalFilters()">Clear</button>
     <span class="fcount" id="tCount"></span>
   </div>
-  <div class="btn-row no-print"><button class="btn sec sm" onclick="exportTotal()">⬇ Export CSV (filtered)</button><button class="btn sec sm" onclick="window.print()">🖨 Print</button></div>
+  <div class="btn-row no-print"><button class="btn sec sm" onclick="exportTotal()">⬇ Export CSV (filtered)</button><button class="btn sec sm" onclick="printPage()">🖨 Print</button></div>
   <div id="totalOut"><div class="empty"><span class="icon">📊</span>Run Generate first</div></div>
 </div>
 </section>
@@ -257,7 +295,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
     <button class="btn sec sm" onclick="clearFilters()">Clear</button>
     <span class="fcount" id="fCount"></span>
   </div>
-  <div class="btn-row no-print"><button class="btn sec sm" onclick="exportDetail()">⬇ Export CSV (filtered)</button><button class="btn sec sm" onclick="window.print()">🖨 Print</button></div>
+  <div class="btn-row no-print"><button class="btn sec sm" onclick="exportDetail()">⬇ Export CSV (filtered)</button><button class="btn sec sm" onclick="printPage()">🖨 Print</button></div>
   <div id="detailOut"><div class="empty"><span class="icon">📋</span>Run Generate first</div></div>
 </div>
 </section>
@@ -485,10 +523,13 @@ function aggregate(rows){
   const t={};
   rows.forEach(d=>{
     const k=d.material+'|'+(d.colour||'');
-    if(!t[k])t[k]={material:d.material,colour:d.colour||'',qty:0,jobs:new Set(),stages:new Set()};
-    t[k].qty+=d.required;t[k].jobs.add(d.job);t[k].stages.add(d.bomStage);
+    if(!t[k])t[k]={material:d.material,colour:d.colour||'',qty:0,jobs:new Set(),codes:new Set(),stages:new Set()};
+    t[k].qty+=d.required;
+    t[k].jobs.add(d.job);
+    if(d.matCode)t[k].codes.add(d.matCode);
+    t[k].stages.add(d.bomStage);
   });
-  return Object.values(t).map(x=>({material:x.material,colour:x.colour,qty:x.qty,jobs:[...x.jobs].join(', '),stages:[...x.stages].join(', ')})).sort((a,b)=>a.material.localeCompare(b.material));
+  return Object.values(t).map(x=>({material:x.material,colour:x.colour,qty:x.qty,jobs:[...x.jobs].join(', '),codes:[...x.codes].join(', '),stages:[...x.stages].join(', ')})).sort((a,b)=>a.material.localeCompare(b.material));
 }
 function renderTotal(){
   const el=document.getElementById('totalOut');
@@ -497,7 +538,7 @@ function renderTotal(){
   const rows=getFilteredForTotal(),agg=aggregate(rows);
   document.getElementById('tCount').textContent=`${agg.length} material${agg.length===1?'':'s'} · ${rows.length} detail rows`;
   if(!agg.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No materials match filters</div>';return}
-  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th>Jobs</th><th>Stages</th></tr></thead><tbody>${agg.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td>${esc(t.jobs)}</td><td>${esc(t.stages)}</td></tr>`).join('')}</tbody></table></div>`;
+  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th class="col-jobs">Jobs</th><th class="col-codes">Material Code</th><th>Stages</th></tr></thead><tbody>${agg.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td class="col-jobs">${esc(t.jobs)}</td><td class="col-codes">${esc(t.codes)||'—'}</td><td>${esc(t.stages)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function clearTotalFilters(){['tSearch','tStage','tMachine','tJob'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderTotal()}
 
@@ -535,8 +576,20 @@ function clearFilters(){['fSearch','fStage','fMaterial','fMachine'].forEach(id=>
 
 function renderWarns(){const el=document.getElementById('warnOut');if(!S.warns.length){el.innerHTML='<div class="empty"><span class="icon">✅</span>No warnings</div>';return}el.innerHTML=S.warns.map(w=>`<div class="warn ${w.level}"><span class="ico">${w.level==='error'?'✕':'!'}</span><span>${esc(w.msg)}</span></div>`).join('')}
 
+/* PRINT HELPERS */
+const TAB_NAMES={setup:'BOM Setup',plan:'Planning',stages:'Stage Filter',total:'Daily Total',detail:'Per-Row Detail',warns:'Warnings'};
+function updatePrintHeader(){
+  const active=document.querySelector('.tab.active');
+  const name=active?(TAB_NAMES[active.id]||active.id):'';
+  const user=document.getElementById('userChip').textContent||'';
+  document.getElementById('phSub').textContent=`${name} · ${new Date().toLocaleString()} · ${user}`;
+}
+function printPage(){updatePrintHeader();window.print()}
+window.addEventListener('beforeprint',updatePrintHeader);
+
+/* EXPORT */
 function dl(rows,fn){const csv=rows.map(r=>r.map(c=>{const s=(c==null?'':String(c));return(s.includes(',')||s.includes('"')||s.includes('\n'))?'"'+s.replace(/"/g,'""')+'"':s}).join(',')).join('\n');const b=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href)}
-function exportTotal(){if(!S.detail.length)return alert('Generate first');const rows=getFilteredForTotal(),agg=aggregate(rows);if(!agg.length)return alert('No rows match');dl([['Material','Colour','Qty (kg)','Jobs','Stages'],...agg.map(t=>[t.material,t.colour,t.qty.toFixed(3),t.jobs,t.stages])],`daily_total_${new Date().toISOString().slice(0,10)}.csv`)}
+function exportTotal(){if(!S.detail.length)return alert('Generate first');const rows=getFilteredForTotal(),agg=aggregate(rows);if(!agg.length)return alert('No rows match');dl([['Material','Colour','Qty (kg)','Jobs','Material Code','Stages'],...agg.map(t=>[t.material,t.colour,t.qty.toFixed(3),t.jobs,t.codes,t.stages])],`daily_total_${new Date().toISOString().slice(0,10)}.csv`)}
 function exportDetail(){if(!S.detail.length)return alert('Generate first');const rows=getFilteredDetail();if(!rows.length)return alert('No rows match filter');dl([['#','Job','Item','Plan Stage','Qty','BOM Stage','Material','Colour','Machine','Code','Description','Rate','Required (kg)'],...rows.map(d=>[d.seq,d.job,d.item,d.planStage,d.qty,d.bomStage,d.material,d.colour,d.machine,d.matCode,d.matDesc,d.rate.toFixed(3),d.required.toFixed(3)])],`per_row_detail_${new Date().toISOString().slice(0,10)}.csv`)}
 
 function initApp(){if(INITED)return;INITED=true;wireDrop('bomDrop','bomFile',handleBomFile);wireDrop('planDrop','planFile',handlePlanFile);restoreBom();restorePlan();loadSynEditor();tryAutoLoadRepoBom()}
