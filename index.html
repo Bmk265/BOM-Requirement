@@ -128,6 +128,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 
 /* ── PRINT HELPERS (screen) ─────────────────────────────── */
 .print-header{display:none}
+.print-footer{display:none}
 .col-codes{display:none}
 
 /* ── PRINT: exact A4 portrait ───────────────────────────── */
@@ -155,6 +156,13 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   .print-header{display:block;text-align:center;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #000}
   .print-header .ph-title{font-size:16px;font-weight:700;color:#000}
   .print-header .ph-sub{font-size:10px;color:#333;margin-top:2px}
+
+  .print-footer{
+    display:flex;justify-content:space-between;
+    position:fixed;bottom:0;left:0;right:0;
+    padding:2mm 10mm;font-size:8.5px;color:#555;
+    border-top:1px solid #ccc;background:#fff;
+  }
 
   /* Daily Total: swap Jobs → Material Code on paper */
   .col-jobs{display:none!important}
@@ -196,6 +204,10 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 <div class="print-header" id="printHeader">
   <div class="ph-title">BOM Requirement</div>
   <div class="ph-sub" id="phSub"></div>
+</div>
+<div class="print-footer" id="printFooter">
+  <span id="pfDate"></span>
+  <span id="pfUser"></span>
 </div>
 
 <section id="setup" class="tab active">
@@ -578,11 +590,15 @@ function renderWarns(){const el=document.getElementById('warnOut');if(!S.warns.l
 
 /* PRINT HELPERS */
 const TAB_NAMES={setup:'BOM Setup',plan:'Planning',stages:'Stage Filter',total:'Daily Total',detail:'Per-Row Detail',warns:'Warnings'};
+const PRINT_SUBTITLES={total:'Total Material wise requirement'};
 function updatePrintHeader(){
   const active=document.querySelector('.tab.active');
-  const name=active?(TAB_NAMES[active.id]||active.id):'';
+  const subtitle=active?(PRINT_SUBTITLES[active.id]||TAB_NAMES[active.id]||active.id):'';
   const user=document.getElementById('userChip').textContent||'';
-  document.getElementById('phSub').textContent=`${name} · ${new Date().toLocaleString()} · ${user}`;
+  const now=new Date();
+  document.getElementById('phSub').textContent=subtitle;
+  document.getElementById('pfDate').textContent=now.toLocaleDateString()+' '+now.toLocaleTimeString();
+  document.getElementById('pfUser').textContent=user?'User: '+user:'';
 }
 function printPage(){updatePrintHeader();window.print()}
 window.addEventListener('beforeprint',updatePrintHeader);
