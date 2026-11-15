@@ -168,7 +168,17 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   .col-jobs{display:none!important}
   .col-codes{display:table-cell!important}
 }
+
+/* ── OFFLINE BANNER ─────────────────────────────── */
+#offlineBanner {
+  display: none; position: fixed; top: 0; left: 0; right: 0; 
+  background: #d97706; color: #fff; text-align: center; 
+  padding: 8px; font-size: 12px; font-weight: 600; z-index: 9999;
+}
 </style></head><body>
+
+<!-- OFFLINE BANNER -->
+<div id="offlineBanner">⚠️ You are offline. Using saved data.</div>
 
 <div id="loginScreen" class="login-screen">
   <div class="login-card">
@@ -338,6 +348,15 @@ function installApp(){if(!deferredPrompt){toast('Use browser menu → Install ap
 if('serviceWorker'in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
 
 function toast(msg,type){const t=document.createElement('div');t.className='toast '+(type||'');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
+
+/* OFFLINE BANNER */
+function updateOnlineStatus() {
+  const banner = document.getElementById('offlineBanner');
+  if (banner) banner.style.display = navigator.onLine ? 'none' : 'block';
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+updateOnlineStatus();
 
 /* STATE */
 let S={detail:[],warns:[]};
