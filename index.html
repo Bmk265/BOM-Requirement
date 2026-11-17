@@ -72,7 +72,7 @@ h2{font-size:15px;font-weight:600;margin-bottom:4px}
 .grid-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
 .grid-toolbar .count{color:var(--tx3);font-size:11.5px;margin-left:auto;font-weight:500}
 .grid-wrap{max-height:520px;overflow:auto;border:1px solid var(--bd);border-radius:8px;background:var(--card)}
-.grid-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;table-layout:fixed}
+.grid-table{min-width:1050px;width:100%;border-collapse:separate;border-spacing:0;font-size:12px;table-layout:fixed}
 .grid-table th{background:var(--bg);padding:9px 10px;text-align:left;font-weight:600;font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2;border-bottom:1px solid var(--bd2);white-space:nowrap;user-select:none}
 .grid-table td{border-bottom:1px solid var(--bd);border-right:1px solid var(--bd);vertical-align:top}
 .grid-table tr:last-child td{border-bottom:none}
@@ -135,6 +135,24 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 .toast.ok{background:var(--ok)}
 .toast.err{background:var(--er)}
 
+/* ── EXCEL STYLE COLUMN FILTERS ────────────────────────── */
+.th-filter-wrap{display:flex;align-items:center;gap:6px;width:100%}
+.th-filter-btn{background:transparent;border:none;color:var(--tx3);cursor:pointer;font-size:10px;padding:2px 4px;border-radius:3px;margin-left:auto;transition:all .15s}
+.th-filter-btn:hover{background:var(--bd);color:var(--tx)}
+.th-filter-btn.active{color:var(--ac);background:var(--acbg)}
+.excel-pop{display:none;position:fixed;width:240px;max-height:360px;background:#fff;border:1px solid var(--bd2);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.15);z-index:1000;flex-direction:column;overflow:hidden;text-transform:none;letter-spacing:normal;font-weight:normal}
+.excel-pop.open{display:flex}
+.excel-pop-search{padding:8px;border-bottom:1px solid var(--bd)}
+.excel-pop-search input{width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px}
+.excel-pop-search input:focus{outline:none;border-color:var(--ac)}
+.excel-pop-list{flex:1;overflow:auto;padding:6px}
+.excel-pop-list label{display:flex;align-items:center;gap:8px;padding:4px 8px;font-size:12px;cursor:pointer;border-radius:4px;color:var(--tx)}
+.excel-pop-list label:hover{background:var(--bg)}
+.excel-pop-list input[type="checkbox"]{accent-color:var(--ac);cursor:pointer;margin:0}
+.excel-pop-footer{display:flex;justify-content:space-between;padding:8px;border-top:1px solid var(--bd);background:var(--bg)}
+.excel-pop-footer button{background:transparent;border:none;color:var(--ac);font-size:12px;cursor:pointer;font-weight:500}
+.excel-pop-footer button:hover{text-decoration:underline}
+
 /* ── PRINT HELPERS (screen) ─────────────────────────────── */
 .print-header{display:none}
 .print-footer{display:none}
@@ -144,7 +162,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 @page { size: A4 portrait; margin: 10mm; }
 
 @media print{
-  header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar,h2,header h1,header .logo,header .user-info,.empty,.btn-row,.github-loader{display:none!important}
+  header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar,h2,header h1,header .logo,header .user-info,.empty,.btn-row,.github-loader,.th-filter-btn,.excel-pop{display:none!important}
   body{background:#fff;font-size:9px}
   main{padding:0;width:100%}
   .card{box-shadow:none;border:none;padding:0;margin:0}
@@ -262,15 +280,26 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   <div class="drop-zone" id="bomDrop"><span class="icon">📄</span><div><div class="title">Or upload BOM file / click</div><div class="sub">.csv / .xlsx / .xls</div></div></div>
   <input type="file" id="bomFile" accept=".csv,.xlsx,.xls" style="display:none">
   <div class="filter-bar no-print">
-    <span class="flabel">Filter</span>
-    <input type="text" id="bSearch" placeholder="Search sales order, item, operation, material, code…" oninput="renderBomGrid()">
-    <button class="btn sec sm" onclick="clearBomFilters()">Clear</button>
+    <span class="flabel">Global Search</span>
+    <input type="text" id="bSearch" placeholder="Search across all columns…" oninput="renderBomGrid()">
+    <button class="btn sec sm" onclick="clearBomFilters()">Clear Filters</button>
     <span class="fcount" id="bCount"></span>
   </div>
   <div class="grid-toolbar"><button class="btn sec sm" onclick="addBomRow()">+ Add row</button><button class="btn sec sm" onclick="clearBomGrid()">Clear all</button><span class="count" id="bomCount">0 rows</span></div>
   <div class="grid-wrap"><table class="grid-table" id="bomGridTable">
     <colgroup><col style="width:38px"><col style="width:110px"><col style="width:70px"><col style="width:200px"><col style="width:100px"><col style="width:100px"><col style="width:240px"><col style="width:220px"><col style="width:90px"><col style="width:36px"></colgroup>
-    <thead><tr><th class="rownum">#</th><th>SALES ORDER</th><th>ITEM</th><th>OPERATION JDM</th><th style="text-align:right">BOM/KM - JDM</th><th>MATERIAL CODE</th><th>MATERIAL DISC</th><th>SIZE</th><th>COLOUR</th><th></th></tr></thead>
+    <thead><tr>
+      <th class="rownum">#</th>
+      <th><div class="th-filter-wrap">SALES ORDER <button class="th-filter-btn" data-col="0">▼</button></div></th>
+      <th><div class="th-filter-wrap">ITEM <button class="th-filter-btn" data-col="1">▼</button></div></th>
+      <th><div class="th-filter-wrap">OPERATION JDM <button class="th-filter-btn" data-col="2">▼</button></div></th>
+      <th style="text-align:right"><div class="th-filter-wrap" style="justify-content:flex-end">BOM/KM - JDM <button class="th-filter-btn" data-col="3">▼</button></div></th>
+      <th><div class="th-filter-wrap">MATERIAL CODE <button class="th-filter-btn" data-col="4">▼</button></div></th>
+      <th><div class="th-filter-wrap">MATERIAL DISC <button class="th-filter-btn" data-col="5">▼</button></div></th>
+      <th><div class="th-filter-wrap">SIZE <button class="th-filter-btn" data-col="6">▼</button></div></th>
+      <th><div class="th-filter-wrap">COLOUR <button class="th-filter-btn" data-col="7">▼</button></div></th>
+      <th></th>
+    </tr></thead>
     <tbody id="bomGridBody"></tbody>
   </table></div>
   <div id="bomStatus"></div>
@@ -445,7 +474,7 @@ function isPlanHeader(r){if(!r)return false;return /^stage$/i.test((r[0]||'').tr
 
 /* BOM GRID */
 const BOM_COLS=[{ph:'338607'},{ph:'4'},{ph:'ARMORING'},{ph:'32.553',num:true},{ph:'10000076'},{ph:'GALVANISED STEEL WIRE 0.8 MM'},{ph:'1PX1.50SQ.MM BRD-ARM CABLE'},{ph:''}];
-function isBomFilterActive(){const el=document.getElementById('bSearch');return !!(el&&el.value.trim())}
+function isBomFilterActive(){const el=document.getElementById('bSearch');return !!(el&&el.value.trim()) || Object.values(BOM_COL_FILTERS).some(s=>s.size>0)}
 function addBomRow(data){const body=document.getElementById('bomGridBody');const tr=document.createElement('tr');tr.innerHTML=`<td class="rownum">${body.children.length+1}</td>`+BOM_COLS.map((c,i)=>{const v=data?(data[i]||''):'';const editable=!isBomFilterActive();return `<td ${editable?'contenteditable="true"':''} data-col="${i}" data-ph="${esc(c.ph)}" class="${c.num?'num':''}">${esc(v)}</td>`}).join('')+`<td class="actions"><button class="del-btn" title="Delete">×</button></td>`;tr.querySelector('.del-btn').onclick=()=>{tr.remove();if(!body.children.length)addBomRow();renumberBom();updateBomCount();saveBomToStorage();refreshStages()};tr.querySelectorAll('td[contenteditable]').forEach(td=>{td.addEventListener('input',()=>{if(isBomFilterActive())return;if(tr===body.lastElementChild&&hasContent(tr))addBomRow();updateBomCount();saveBomToStorage();refreshStages()});td.addEventListener('keydown',e=>navKey(e,td,addBomRow))});body.appendChild(tr);return tr}
 function renumberBom(){document.querySelectorAll('#bomGridBody tr').forEach((tr,i)=>{tr.querySelector('.rownum').textContent=i+1})}
 function updateBomCount(){const n=Array.from(document.querySelectorAll('#bomGridBody tr')).filter(hasContent).length;document.getElementById('bomCount').textContent=n+' row'+(n===1?'':'s')}
@@ -458,22 +487,133 @@ document.getElementById('bomGridTable').addEventListener('paste',e=>{const t=(e.
 function pasteBom(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));const h=rows[0]||[];const map={job:idxOf(h,['sales order']),item:idxOf(h,['item']),stage:idxOf(h,['operation jdm']),rate:idxOf(h,['bom/km - jdm','bom/km']),matCode:idxOf(h,['material code']),material:idxOf(h,['material disc']),matDesc:idxOf(h,['size']),colour:idxOf(h,['colour','color'])};if(map.job<0||map.item<0||map.stage<0||map.rate<0)return alert('BOM paste needs header:\nSALES ORDER · ITEM · OPERATION JDM · BOM/KM - JDM');rows.shift();const dataRows=rows.filter(r=>r.some(c=>c&&c.toString().trim())).map(r=>[r[map.job]||'',r[map.item]||'',r[map.stage]||'',r[map.rate]||'',map.matCode>=0?(r[map.matCode]||''):'',map.material>=0?(r[map.material]||''):'',map.matDesc>=0?(r[map.matDesc]||''):'',map.colour>=0?(r[map.colour]||''):'']);if(!dataRows.length)return alert('No data rows');const body=document.getElementById('bomGridBody');body.innerHTML='';dataRows.forEach(r=>addBomRow(r));addBomRow();renumberBom();updateBomCount();saveBomToStorage();renderBomGrid();refreshStages();document.getElementById('bomStatus').innerHTML=`<div class="summary">✅ Parsed ${dataRows.length} BOM rows</div>`}
 function idxOf(h,pats){for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x===p))return i}for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x.includes(p)))return i}return -1}
 
-/* BOM GRID FILTER */
-function getBomRowsRaw(){const body=document.getElementById('bomGridBody');return Array.from(body.children).map(tr=>Array.from(tr.querySelectorAll('td[data-col]')).map(c=>c.textContent))}
+/* BOM GRID FILTER (EXCEL STYLE) */
+const BOM_COL_FILTERS={0:new Set(),1:new Set(),2:new Set(),3:new Set(),4:new Set(),5:new Set(),6:new Set(),7:new Set()};
+let ACTIVE_COL_POP=null;
+
+function closeExcelPops(){
+  if(ACTIVE_COL_POP){ACTIVE_COL_POP.classList.remove('open');ACTIVE_COL_POP=null}
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.excel-pop') && !e.target.closest('.th-filter-btn')) closeExcelPops();
+});
+
+function openColFilter(colIdx, btnEl){
+  closeExcelPops();
+  // Read all data from storage so we see all unique values
+  let all=[];
+  try{const s=localStorage.getItem(LS_BOM);if(s)all=JSON.parse(s)}catch(e){}
+  all=all.filter(r=>r.some(c=>c.trim()));
+
+  // Extract unique values for this col
+  const uniq=[...new Set(all.map(r=>String(r[colIdx]||'').trim()).filter(Boolean))].sort();
+
+  // Build popup
+  const pop=document.createElement('div');
+  pop.className='excel-pop';
+  
+  pop.innerHTML=`
+    <div class="excel-pop-search"><input type="text" placeholder="Search values..." id="excelSearchInput"></div>
+    <div class="excel-pop-list" id="excelPopList">
+      ${uniq.map(v=>`<label><input type="checkbox" value="${esc(v)}" ${BOM_COL_FILTERS[colIdx].has(v)?'checked':''}> ${esc(v)}</label>`).join('')}
+      ${uniq.length?'':'<div style="padding:10px;font-size:12px;color:#94a3b8">No items</div>'}
+    </div>
+    <div class="excel-pop-footer">
+      <button onclick="clearColFilter(${colIdx},this)">Clear</button>
+      <button onclick="closeExcelPops()" style="font-weight:700">Apply</button>
+    </div>
+  `;
+
+  document.body.appendChild(pop);
+  ACTIVE_COL_POP=pop;
+
+  // Position popup below the button
+  const rect=btnEl.getBoundingClientRect();
+  pop.style.top=(rect.bottom+4)+'px';
+  pop.style.left=Math.max(10, Math.min(rect.left, window.innerWidth-250))+'px';
+  
+  // Re-center if it overflows right
+  requestAnimationFrame(()=>{
+    const pr=pop.getBoundingClientRect();
+    if(pr.right>window.innerWidth-10) pop.style.left=(window.innerWidth-pr.width-10)+'px';
+  });
+
+  pop.classList.add('open');
+  btnEl.classList.add('active');
+
+  // Wire up interactions
+  pop.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+    cb.onchange=()=>{
+      if(cb.checked) BOM_COL_FILTERS[colIdx].add(cb.value);
+      else BOM_COL_FILTERS[colIdx].delete(cb.value);
+      renderBomGrid();
+    };
+  });
+
+  const searchInput=pop.querySelector('#excelSearchInput');
+  searchInput.oninput=()=>{
+    const q=searchInput.value.toLowerCase();
+    pop.querySelectorAll('.excel-pop-list label').forEach(l=>{
+      const v=l.textContent.trim().toLowerCase();
+      l.style.display=v.includes(q)?'flex':'none';
+    });
+  };
+  searchInput.focus();
+}
+
+function clearColFilter(colIdx, btnEl){
+  BOM_COL_FILTERS[colIdx].clear();
+  closeExcelPops();
+  renderBomGrid();
+}
+
+function clearBomFilters(){
+  document.getElementById('bSearch').value='';
+  Object.keys(BOM_COL_FILTERS).forEach(k=>BOM_COL_FILTERS[k].clear());
+  document.querySelectorAll('.th-filter-btn').forEach(b=>b.classList.remove('active'));
+  renderBomGrid();
+}
+
 function renderBomGrid(){
   const body=document.getElementById('bomGridBody');
   const q=(document.getElementById('bSearch').value||'').toLowerCase().trim();
+  
+  // Highlight active filter buttons
+  document.querySelectorAll('.th-filter-btn').forEach(btn=>{
+    const c=+btn.dataset.col;
+    if(BOM_COL_FILTERS[c].size>0) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+
   let all=[];
-  try{const s=localStorage.getItem(LS_BOM);if(s)all=JSON.parse(s)}catch(e){all=getBomRowsRaw().filter(r=>r.some(c=>c.trim()))}
+  try{const s=localStorage.getItem(LS_BOM);if(s)all=JSON.parse(s)}catch(e){}
   all=all.filter(r=>r.some(c=>c.trim()));
-  const shown=q?all.filter(r=>r.join(' ').toLowerCase().includes(q)):all;
+
+  // Apply global search AND col filters
+  const shown=all.filter(r=>{
+    // 1. Global search
+    if(q && !r.join(' ').toLowerCase().includes(q)) return false;
+    // 2. Column specific filters
+    for(let i=0;i<8;i++){ // check cols 0-7
+      const f=BOM_COL_FILTERS[i];
+      if(f.size>0){
+        const val=String(r[i]||'').trim();
+        if(!f.has(val)) return false;
+      }
+    }
+    return true;
+  });
+
   body.innerHTML='';
   if(!all.length){for(let i=0;i<2;i++)addBomRow()}
-  else{shown.forEach(r=>addBomRow(r));if(!q)addBomRow()}
+  else{shown.forEach(r=>addBomRow(r));if(!q && !Object.values(BOM_COL_FILTERS).some(s=>s.size>0))addBomRow()}
   renumberBom();updateBomCount();
   const cEl=document.getElementById('bCount');if(cEl)cEl.textContent=`${shown.length} of ${all.length} rows`;
 }
-function clearBomFilters(){const i=document.getElementById('bSearch');if(i)i.value='';renderBomGrid()}
+
+document.querySelectorAll('.th-filter-btn').forEach(btn=>{
+  btn.onclick=(e)=>{e.stopPropagation();openColFilter(+btn.dataset.col, btn)};
+});
 
 /* FILE + GITHUB */
 function wireDrop(zoneId,inputId,handler){const z=document.getElementById(zoneId),i=document.getElementById(inputId);z.onclick=()=>i.click();z.ondragover=e=>{e.preventDefault();z.classList.add('drag')};z.ondragleave=()=>z.classList.remove('drag');z.ondrop=e=>{e.preventDefault();z.classList.remove('drag');if(e.dataTransfer.files.length)readFile(e.dataTransfer.files[0],handler)};i.onchange=e=>{if(e.target.files[0])readFile(e.target.files[0],handler);i.value=''}}
