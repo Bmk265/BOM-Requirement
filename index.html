@@ -617,7 +617,23 @@ document.querySelectorAll('.th-filter-btn').forEach(btn=>{
 
 /* FILE + GITHUB */
 function wireDrop(zoneId,inputId,handler){const z=document.getElementById(zoneId),i=document.getElementById(inputId);z.onclick=()=>i.click();z.ondragover=e=>{e.preventDefault();z.classList.add('drag')};z.ondragleave=()=>z.classList.remove('drag');z.ondrop=e=>{e.preventDefault();z.classList.remove('drag');if(e.dataTransfer.files.length)readFile(e.dataTransfer.files[0],handler)};i.onchange=e=>{if(e.target.files[0])readFile(e.target.files[0],handler);i.value=''}}
-async function readFile(f,handler){if(f.name.toLowerCase().endsWith('.csv')){handler(parseDelim(await f.text()))}else{const b=await f.arrayBuffer();const wb=XLSX.read(b,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handler(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}}
+async function readFile(f,handler){
+  if(f.name.toLowerCase().endsWith('.csv')){
+    // 1. Read the file as raw bytes (ArrayBuffer)
+    const buffer = await f.arrayBuffer();
+    
+    // 2. Decode it using windows-1252 to correctly capture the '±' symbol
+    const decoder = new TextDecoder('windows-1252');
+    const text = decoder.decode(buffer);
+    
+    handler(parseDelim(text));
+  }else{
+    const b=await f.arrayBuffer();
+    const wb=XLSX.read(b,{type:'array'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    handler(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))
+  }
+}
 function handleBomFile(rows){if(!rows.length)return alert('Empty file');const tsv=rows.map(r=>r.map(c=>(c==null?'':String(c))).join('\t')).join('\n');pasteBom(tsv)}
 function handlePlanFile(rows){if(!rows.length)return alert('Empty file');let data=rows;if(isPlanHeader(rows[0]))data=rows.slice(1);const body=document.getElementById('planGridBody');body.innerHTML='';data.forEach(r=>addPlanRow(r.map(c=>c==null?'':String(c))));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Loaded ${data.length} planning rows</div>`}
 function toRawUrl(u){u=u.trim();if(u.includes('raw.githubusercontent.com'))return u;const m=u.match(/^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/(?:blob|raw)\/(.+)$/);if(m)return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}`;return u}
