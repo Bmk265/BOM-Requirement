@@ -398,7 +398,17 @@ let INITED=false;
 /* FIX ENCODING for +/- and other special chars */
 function fixEncoding(str){
   if(!str) return str;
-  return String(str).replace(/\uFFFD/g, '±').replace(/⬖/g, '±');
+  return String(str)
+    .replace(/\uFFFD/g, '±')   // The black diamond
+    .replace(/Â±/g, '±')       // Common Excel mojibake for ±
+    .replace(/â€“/g, '–')      // En-dash
+    .replace(/â€”/g, '—')      // Em-dash
+    .replace(/â€¢/g, '•')      // Bullet
+    .replace(/Â°/g, '°')       // Degree
+    .replace(/Âµ/g, 'µ')       // Micro
+    .replace(/â„¦/g, 'Ω')       // Ohm
+    .replace(/Î©/g, 'Ω')       // Ohm (alternate)
+    .replace(/â‚¬/g, '€');     // Euro
 }
 
 /* MULTI-SELECT LOGIC */
