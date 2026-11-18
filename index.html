@@ -53,13 +53,24 @@ h2{font-size:15px;font-weight:600;margin-bottom:4px}
 .gh-input-row input{flex:1;padding:9px 12px;border:1px solid var(--bd);border-radius:7px;font-family:ui-monospace,monospace;font-size:11.5px}
 .gh-input-row input:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px var(--acbg)}
 .gh-hint{color:var(--tx3);font-size:10.5px;margin-top:6px}
-.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;padding:10px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:8px}
-.filter-bar input,.filter-bar select{padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;background:#fff}
-.filter-bar input:focus,.filter-bar select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 2px var(--acbg)}
-.filter-bar input{flex:1;min-width:220px}
-.filter-bar select{min-width:150px;max-width:220px}
+
+/* MULTI-SELECT FILTER CSS */
+.filter-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;padding:10px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;z-index:10;position:relative}
+.filter-bar input[type="text"]{padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;background:#fff;flex:1;min-width:220px}
+.filter-bar input[type="text"]:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 2px var(--acbg)}
 .filter-bar .fcount{color:var(--tx3);font-size:11.5px;margin-left:auto;font-weight:500}
 .filter-bar .flabel{font-size:10.5px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.4px}
+
+.multi-select{position:relative;min-width:140px;font-size:12px;user-select:none}
+.ms-header{padding:6px 10px;border:1px solid var(--bd);border-radius:6px;background:#fff;cursor:pointer;display:flex;justify-content:space-between;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx2)}
+.ms-header:hover{border-color:var(--bd2)}
+.multi-select.open .ms-header{border-color:var(--ac);box-shadow:0 0 0 2px var(--acbg);color:var(--ac)}
+.ms-list{display:none;position:absolute;top:100%;left:0;min-width:100%;background:#fff;border:1px solid var(--bd);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;max-height:200px;overflow-y:auto;margin-top:4px;padding:4px 0}
+.multi-select.open .ms-list{display:block}
+.ms-list label{display:flex;align-items:center;gap:8px;padding:6px 10px;cursor:pointer;margin:0;font-weight:normal;color:var(--tx);border-bottom:none;text-transform:none;letter-spacing:normal}
+.ms-list label:hover{background:var(--acbg)}
+.ms-list input[type="checkbox"]{cursor:pointer;accent-color:var(--ac);width:14px;height:14px;margin:0}
+
 .grid-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
 .grid-toolbar .count{color:var(--tx3);font-size:11.5px;margin-left:auto;font-weight:500}
 .grid-wrap{max-height:520px;overflow:auto;border:1px solid var(--bd);border-radius:8px;background:var(--card)}
@@ -164,7 +175,6 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
     border-top:1px solid #ccc;background:#fff;
   }
 
-  /* Daily Total: swap Jobs → Material Code on paper */
   .col-jobs{display:none!important}
   .col-codes{display:table-cell!important}
 }
@@ -293,9 +303,20 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   <div class="filter-bar no-print">
     <span class="flabel">Filter</span>
     <input type="text" id="tSearch" placeholder="Search material, colour, job, stage…" oninput="renderTotal()">
-    <select id="tStage" onchange="renderTotal()"><option value="">All stages</option></select>
-    <select id="tMachine" onchange="renderTotal()"><option value="">All machines</option></select>
-    <select id="tJob" onchange="renderTotal()"><option value="">All jobs</option></select>
+    
+    <div class="multi-select" id="ms-tStage">
+      <div class="ms-header" onclick="toggleMS('ms-tStage')">All stages ▼</div>
+      <div class="ms-list" id="ms-tStage-list"></div>
+    </div>
+    <div class="multi-select" id="ms-tMachine">
+      <div class="ms-header" onclick="toggleMS('ms-tMachine')">All machines ▼</div>
+      <div class="ms-list" id="ms-tMachine-list"></div>
+    </div>
+    <div class="multi-select" id="ms-tJob">
+      <div class="ms-header" onclick="toggleMS('ms-tJob')">All jobs ▼</div>
+      <div class="ms-list" id="ms-tJob-list"></div>
+    </div>
+
     <button class="btn sec sm" onclick="clearTotalFilters()">Clear</button>
     <span class="fcount" id="tCount"></span>
   </div>
@@ -311,9 +332,20 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   <div class="filter-bar no-print">
     <span class="flabel">Filter</span>
     <input type="text" id="fSearch" placeholder="Search job, item, material, machine, code…" oninput="renderDetail()">
-    <select id="fMachine" onchange="renderDetail()"><option value="">All machines</option></select>
-    <select id="fMaterial" onchange="renderDetail()"><option value="">All materials</option></select>
-    <select id="fStage" onchange="renderDetail()"><option value="">All stages</option></select>
+    
+    <div class="multi-select" id="ms-fMachine">
+      <div class="ms-header" onclick="toggleMS('ms-fMachine')">All machines ▼</div>
+      <div class="ms-list" id="ms-fMachine-list"></div>
+    </div>
+    <div class="multi-select" id="ms-fMaterial">
+      <div class="ms-header" onclick="toggleMS('ms-fMaterial')">All materials ▼</div>
+      <div class="ms-list" id="ms-fMaterial-list"></div>
+    </div>
+    <div class="multi-select" id="ms-fStage">
+      <div class="ms-header" onclick="toggleMS('ms-fStage')">All stages ▼</div>
+      <div class="ms-list" id="ms-fStage-list"></div>
+    </div>
+
     <button class="btn sec sm" onclick="clearFilters()">Clear</button>
     <span class="fcount" id="fCount"></span>
   </div>
@@ -363,10 +395,61 @@ let S={detail:[],warns:[]};
 const LS_PLAN='bomreq.plangrid',LS_BOM='bomreq.bomgrid',LS_STG='bomreq.stages';
 let INITED=false;
 
+/* FIX ENCODING for +/- and other special chars */
+function fixEncoding(str){
+  if(!str) return str;
+  return String(str).replace(/\uFFFD/g, '±').replace(/⬖/g, '±');
+}
+
+/* MULTI-SELECT LOGIC */
+function toggleMS(id) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.multi-select').forEach(e => e.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.multi-select')) {
+    document.querySelectorAll('.multi-select').forEach(el => el.classList.remove('open'));
+  }
+});
+function getMSValues(id) {
+  const list = document.getElementById(id + '-list');
+  if (!list) return [];
+  return Array.from(list.querySelectorAll('input[type="checkbox"]:checked')).map(i => i.value);
+}
+function setMSOptions(id, options, currentVals) {
+  const list = document.getElementById(id + '-list');
+  const header = document.getElementById(id).querySelector('.ms-header');
+  if (!list || !header) return;
+
+  if(!currentVals || !Array.isArray(currentVals)) {
+    currentVals = Array.from(list.querySelectorAll('input[type="checkbox"]:checked')).map(i => i.value);
+  }
+
+  list.innerHTML = options.map(o => `<label><input type="checkbox" value="${esc(o)}" ${currentVals.includes(o)?'checked':''}> <span>${esc(o)}</span></label>`).join('');
+  list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.onchange = () => {
+      updateMSHeader(id, options.length);
+      if (id.startsWith('ms-t')) renderTotal(); else renderDetail();
+    };
+  });
+  updateMSHeader(id, options.length);
+}
+function updateMSHeader(id, total) {
+  const header = document.getElementById(id).querySelector('.ms-header');
+  const checked = getMSValues(id);
+  if (checked.length === 0) {
+    header.textContent = 'All ' + id.split('-')[1].replace('t','').replace('f','').toLowerCase() + 's ▼';
+  } else {
+    header.textContent = checked.length + ' selected ▼';
+  }
+}
+
 function esc(s){return(s??'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function nStage(s){return(s||'').toString().toLowerCase().replace(/\s+/g,' ').trim()}
-function parseTSVLine(line){if(line.includes('\t'))return line.split('\t');const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'&&line[i+1]==='"'){cur+='"';i++}else if(c==='"')q=false;else cur+=c}else{if(c==='"')q=true;else if(c===','){out.push(cur);cur=''}else cur+=c}}out.push(cur);return out}
-function parseDelim(txt){const lines=txt.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return[];const sep=lines[0].includes('\t')?'\t':',';return lines.map(l=>sep===','?parseTSVLine(l):l.split('\t'))}
+function parseTSVLine(line){if(line.includes('\t'))return line.split('\t');const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'&&line[i+1]==='"'){cur+='"';i++}else if(c==='"')q=false;else cur+=c}else{if(c==='"')q=true;else if(c===','){out.push(cur);cur=''}else cur+=c}}out.push(cur);return out.map(fixEncoding)}
+function parseDelim(txt){const lines=txt.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return[];const sep=lines[0].includes('\t')?'\t':',';return lines.map(l=>sep===','?parseTSVLine(l):l.split('\t').map(fixEncoding))}
 
 const DEFAULT_SYNONYMS={'nylon':['nylon','polyamide'],'polyamide':['nylon','polyamide'],'zerohalogen':['zerohalogen','zero halogen','zhfr','lszh','lsfh','halogen free','low smoke'],'zhfr':['zerohalogen','zero halogen','zhfr','lszh','halogen free','low smoke'],'lszh':['zerohalogen','zero halogen','zhfr','lszh','halogen free','low smoke'],'hdpe':['hdpe','high density poly','high density polyethylene'],'xlpe':['xlpe','cross-linked poly','crosslinked polyethylene','xlp'],'pvc':['pvc','polyvinyl chloride'],'pe':['pe','polyethylene'],'polyethylene':['pe','polyethylene'],'aluminium':['aluminium','aluminum'],'aluminum':['aluminium','aluminum'],'copper':['copper','cu'],'steel':['steel','galvanised','galvanized','gi wire'],'galvanised':['steel','galvanised','galvanized'],'galvanized':['steel','galvanised','galvanized'],'polyester':['polyester','polyster'],'polyster':['polyester','polyster'],'tin':['tin'],'fr':['fr','frls','flame retardant'],'frls':['fr','frls','flame retardant'],'lsfh':['lsfh','lszh','zerohalogen','halogen free']};
 let SYNONYMS=JSON.parse(localStorage.getItem('bomreq.synonyms')||'null')||{...DEFAULT_SYNONYMS};
@@ -403,7 +486,7 @@ function clearPlanGrid(){if(!confirm('Clear planning rows?'))return;document.get
 function initPlanGrid(){document.getElementById('planGridBody').innerHTML='';for(let i=0;i<3;i++)addPlanRow();renumberPlan();updatePlanCount()}
 function restorePlan(){try{const s=localStorage.getItem(LS_PLAN);if(!s){initPlanGrid();return}const rows=JSON.parse(s);const body=document.getElementById('planGridBody');body.innerHTML='';if(!rows.length){for(let i=0;i<3;i++)addPlanRow()}else{rows.forEach(r=>addPlanRow(r));addPlanRow()}renumberPlan();updatePlanCount()}catch(e){initPlanGrid()}}
 function getPlanData(){const body=document.getElementById('planGridBody');const out=[];Array.from(body.children).forEach((tr,i)=>{if(!hasContent(tr))return;const c=Array.from(tr.querySelectorAll('td[contenteditable]')).map(x=>x.textContent.trim());const item=c[3]||'';out.push({rowNum:i+1,stage:c[0]||'',job:c[1]||'',customer:c[2]||'',item,itemPrefix:item.split('-')[0].trim(),desc:c[4]||'',qty:parseFloat(c[5])||0,material:c[6]||'',colour:c[7]||'',machine:c[8]||''})});return out}
-document.getElementById('planGridTable').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!t)return;e.preventDefault();pastePlan(t)});
+document.getElementById('planGridTable').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!t)return;e.preventDefault();pastePlan(fixEncoding(t))});
 function pastePlan(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));if(rows.length&&isPlanHeader(rows[0]))rows.shift();if(!rows.length)return;const body=document.getElementById('planGridBody');body.innerHTML='';rows.forEach(r=>addPlanRow(r));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Pasted ${rows.length} planning rows</div>`}
 function isPlanHeader(r){if(!r)return false;return /^stage$/i.test((r[0]||'').trim())&&r.some(c=>/job|item|qty|planned/i.test(c||''))}
 
@@ -417,18 +500,18 @@ function clearBomGrid(){if(!confirm('Clear BOM rows?'))return;document.getElemen
 function initBomGrid(){document.getElementById('bomGridBody').innerHTML='';for(let i=0;i<2;i++)addBomRow();renumberBom();updateBomCount()}
 function restoreBom(){try{const s=localStorage.getItem(LS_BOM);if(!s){initBomGrid();refreshStages();return}const rows=JSON.parse(s);const body=document.getElementById('bomGridBody');body.innerHTML='';if(!rows.length){for(let i=0;i<2;i++)addBomRow()}else{rows.forEach(r=>addBomRow(r));addBomRow()}renumberBom();updateBomCount();refreshStages()}catch(e){initBomGrid();refreshStages()}}
 function getBomData(){const body=document.getElementById('bomGridBody');const out=[];Array.from(body.children).forEach(tr=>{if(!hasContent(tr))return;const c=Array.from(tr.querySelectorAll('td[contenteditable]')).map(x=>x.textContent.trim());const rate=parseFloat(c[3]);if(!c[0]||!c[1]||!c[2]||isNaN(rate))return;out.push({job:c[0],item:c[1],stage:c[2],stageNorm:nStage(c[2]),rate,matCode:c[4]||'',material:c[5]||'',matDesc:c[6]||'',colour:c[7]||''})});return out}
-document.getElementById('bomGridTable').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!t)return;e.preventDefault();pasteBom(t)});
+document.getElementById('bomGridTable').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!t)return;e.preventDefault();pasteBom(fixEncoding(t))});
 function pasteBom(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));const h=rows[0]||[];const map={job:idxOf(h,['sales order']),item:idxOf(h,['item']),stage:idxOf(h,['operation jdm']),rate:idxOf(h,['bom/km - jdm','bom/km']),matCode:idxOf(h,['material code']),material:idxOf(h,['material disc']),matDesc:idxOf(h,['size']),colour:idxOf(h,['colour','color'])};if(map.job<0||map.item<0||map.stage<0||map.rate<0)return alert('BOM paste needs header:\nSALES ORDER · ITEM · OPERATION JDM · BOM/KM - JDM');rows.shift();const dataRows=rows.filter(r=>r.some(c=>c&&c.toString().trim())).map(r=>[r[map.job]||'',r[map.item]||'',r[map.stage]||'',r[map.rate]||'',map.matCode>=0?(r[map.matCode]||''):'',map.material>=0?(r[map.material]||''):'',map.matDesc>=0?(r[map.matDesc]||''):'',map.colour>=0?(r[map.colour]||''):'']);if(!dataRows.length)return alert('No data rows');const body=document.getElementById('bomGridBody');body.innerHTML='';dataRows.forEach(r=>addBomRow(r));addBomRow();renumberBom();updateBomCount();saveBomToStorage();refreshStages();document.getElementById('bomStatus').innerHTML=`<div class="summary">✅ Parsed ${dataRows.length} BOM rows</div>`}
 function idxOf(h,pats){for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x===p))return i}for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x.includes(p)))return i}return -1}
 
 /* FILE + GITHUB */
 function wireDrop(zoneId,inputId,handler){const z=document.getElementById(zoneId),i=document.getElementById(inputId);z.onclick=()=>i.click();z.ondragover=e=>{e.preventDefault();z.classList.add('drag')};z.ondragleave=()=>z.classList.remove('drag');z.ondrop=e=>{e.preventDefault();z.classList.remove('drag');if(e.dataTransfer.files.length)readFile(e.dataTransfer.files[0],handler)};i.onchange=e=>{if(e.target.files[0])readFile(e.target.files[0],handler);i.value=''}}
-async function readFile(f,handler){if(f.name.toLowerCase().endsWith('.csv')){handler(parseDelim(await f.text()))}else{const b=await f.arrayBuffer();const wb=XLSX.read(b,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handler(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}}
-function handleBomFile(rows){if(!rows.length)return alert('Empty file');const tsv=rows.map(r=>r.map(c=>(c==null?'':String(c))).join('\t')).join('\n');pasteBom(tsv)}
-function handlePlanFile(rows){if(!rows.length)return alert('Empty file');let data=rows;if(isPlanHeader(rows[0]))data=rows.slice(1);const body=document.getElementById('planGridBody');body.innerHTML='';data.forEach(r=>addPlanRow(r.map(c=>c==null?'':String(c))));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Loaded ${data.length} planning rows</div>`}
+async function readFile(f,handler){if(f.name.toLowerCase().endsWith('.csv')){handler(parseDelim(fixEncoding(await f.text())))}else{const b=await f.arrayBuffer();const wb=XLSX.read(b,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handler(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}}
+function handleBomFile(rows){if(!rows.length)return alert('Empty file');const tsv=rows.map(r=>r.map(c=>fixEncoding(c==null?'':String(c))).join('\t')).join('\n');pasteBom(tsv)}
+function handlePlanFile(rows){if(!rows.length)return alert('Empty file');let data=rows;if(isPlanHeader(rows[0]))data=rows.slice(1);const body=document.getElementById('planGridBody');body.innerHTML='';data.forEach(r=>addPlanRow(r.map(c=>fixEncoding(c==null?'':String(c)))));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Loaded ${data.length} planning rows</div>`}
 function toRawUrl(u){u=u.trim();if(u.includes('raw.githubusercontent.com'))return u;const m=u.match(/^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/(?:blob|raw)\/(.+)$/);if(m)return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}`;return u}
-async function loadFromGitHubUrl(){const url=toRawUrl(document.getElementById('ghUrl').value);if(!url)return alert('Paste GitHub URL');try{toast('Fetching...');const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);if(url.toLowerCase().includes('.csv')){handleBomFile(parseDelim(await res.text()))}else{const buf=await res.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handleBomFile(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}toast('✅ BOM loaded','ok')}catch(e){toast('Failed: '+e.message,'err')}}
-async function tryAutoLoadRepoBom(){if(localStorage.getItem(LS_BOM))return;const cands=['bom.csv','bom.xlsx','bom.xls','BOM.csv','BOM.xlsx'];for(const f of cands){try{const head=await fetch(f,{method:'HEAD'});if(!head.ok)continue;const res=await fetch(f);if(!res.ok)continue;if(f.toLowerCase().endsWith('.csv')){handleBomFile(parseDelim(await res.text()))}else{const buf=await res.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handleBomFile(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}toast('✅ Auto-loaded BOM','ok');return}catch(e){}}}
+async function loadFromGitHubUrl(){const url=toRawUrl(document.getElementById('ghUrl').value);if(!url)return alert('Paste GitHub URL');try{toast('Fetching...');const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);if(url.toLowerCase().includes('.csv')){handleBomFile(parseDelim(fixEncoding(await res.text())))}else{const buf=await res.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handleBomFile(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}toast('✅ BOM loaded','ok')}catch(e){toast('Failed: '+e.message,'err')}}
+async function tryAutoLoadRepoBom(){if(localStorage.getItem(LS_BOM))return;const cands=['bom.csv','bom.xlsx','bom.xls','BOM.csv','BOM.xlsx'];for(const f of cands){try{const head=await fetch(f,{method:'HEAD'});if(!head.ok)continue;const res=await fetch(f);if(!res.ok)continue;if(f.toLowerCase().endsWith('.csv')){handleBomFile(parseDelim(fixEncoding(await res.text())))}else{const buf=await res.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handleBomFile(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}toast('✅ Auto-loaded BOM','ok');return}catch(e){}}}
 
 /* STAGES */
 function stageFamilyLabel(s){if(isLayingStage(s))return 'Laying';if(isBraidingStage(s))return 'Braiding';if(isArmoringStage(s))return 'Armoring';if(isInnerFamilyStage(s))return 'Inner';return ''}
@@ -531,22 +614,25 @@ function generate(){
 
 /* DAILY TOTAL with filters */
 function populateTotalDropdowns(){
-  const sSel=document.getElementById('tStage').value,mSel=document.getElementById('tMachine').value,jSel=document.getElementById('tJob').value;
   const stages=[...new Set(S.detail.map(d=>d.bomStage).filter(Boolean))].sort();
   const machines=[...new Set(S.detail.map(d=>d.machine).filter(Boolean))].sort();
   const jobs=[...new Set(S.detail.map(d=>d.job).filter(Boolean))].sort();
-  document.getElementById('tStage').innerHTML='<option value="">All stages</option>'+stages.map(x=>`<option${x===sSel?' selected':''}>${esc(x)}</option>`).join('');
-  document.getElementById('tMachine').innerHTML='<option value="">All machines</option>'+machines.map(x=>`<option${x===mSel?' selected':''}>${esc(x)}</option>`).join('');
-  document.getElementById('tJob').innerHTML='<option value="">All jobs</option>'+jobs.map(x=>`<option${x===jSel?' selected':''}>${esc(x)}</option>`).join('');
+  
+  setMSOptions('ms-tStage', stages, getMSValues('ms-tStage'));
+  setMSOptions('ms-tMachine', machines, getMSValues('ms-tMachine'));
+  setMSOptions('ms-tJob', jobs, getMSValues('ms-tJob'));
 }
 function getFilteredForTotal(){
-  const s=document.getElementById('tStage').value,m=document.getElementById('tMachine').value,j=document.getElementById('tJob').value;
-  const q=(document.getElementById('tSearch').value||'').toLowerCase().trim();
+  const sVals=document.getElementById('tSearch').value.toLowerCase().trim();
+  const selStages=getMSValues('ms-tStage').map(x=>x.toLowerCase());
+  const selMachines=getMSValues('ms-tMachine').map(x=>x.toLowerCase());
+  const selJobs=getMSValues('ms-tJob').map(x=>x.toLowerCase());
+  
   return S.detail.filter(d=>{
-    if(s&&d.bomStage!==s)return false;
-    if(m&&d.machine!==m)return false;
-    if(j&&d.job!==j)return false;
-    if(q){const hay=[d.material,d.colour,d.job,d.bomStage,d.machine,d.matCode,d.matDesc].join(' ').toLowerCase();if(!hay.includes(q))return false}
+    if(selStages.length>0 && !selStages.includes(d.bomStage.toLowerCase()))return false;
+    if(selMachines.length>0 && !selMachines.includes(d.machine.toLowerCase()))return false;
+    if(selJobs.length>0 && !selJobs.includes(d.job.toLowerCase()))return false;
+    if(sVals){const hay=[d.material,d.colour,d.job,d.bomStage,d.machine,d.matCode,d.matDesc].join(' ').toLowerCase();if(!hay.includes(sVals))return false}
     return true;
   });
 }
@@ -571,26 +657,34 @@ function renderTotal(){
   if(!agg.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No materials match filters</div>';return}
   el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th class="col-jobs">Jobs</th><th class="col-codes">Material Code</th><th>Stages</th></tr></thead><tbody>${agg.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td class="col-jobs">${esc(t.jobs)}</td><td class="col-codes">${esc(t.codes)||'—'}</td><td>${esc(t.stages)}</td></tr>`).join('')}</tbody></table></div>`;
 }
-function clearTotalFilters(){['tSearch','tStage','tMachine','tJob'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderTotal()}
+function clearTotalFilters(){
+  document.getElementById('tSearch').value='';
+  document.querySelectorAll('#ms-tStage-list input, #ms-tMachine-list input, #ms-tJob-list input').forEach(i=>i.checked=false);
+  updateMSHeader('ms-tStage'); updateMSHeader('ms-tMachine'); updateMSHeader('ms-tJob');
+  renderTotal();
+}
 
 /* PER-ROW DETAIL with filters */
 function populateDetailDropdowns(){
-  const sSel=document.getElementById('fStage').value,mSel=document.getElementById('fMaterial').value,machSel=document.getElementById('fMachine').value;
   const stages=[...new Set(S.detail.map(d=>d.bomStage).filter(Boolean))].sort();
   const materials=[...new Set(S.detail.map(d=>d.material).filter(Boolean))].sort();
   const machines=[...new Set(S.detail.map(d=>d.machine).filter(Boolean))].sort();
-  document.getElementById('fStage').innerHTML='<option value="">All stages</option>'+stages.map(x=>`<option${x===sSel?' selected':''}>${esc(x)}</option>`).join('');
-  document.getElementById('fMaterial').innerHTML='<option value="">All materials</option>'+materials.map(x=>`<option${x===mSel?' selected':''}>${esc(x)}</option>`).join('');
-  document.getElementById('fMachine').innerHTML='<option value="">All machines</option>'+machines.map(x=>`<option${x===machSel?' selected':''}>${esc(x)}</option>`).join('');
+  
+  setMSOptions('ms-fMachine', machines, getMSValues('ms-fMachine'));
+  setMSOptions('ms-fMaterial', materials, getMSValues('ms-fMaterial'));
+  setMSOptions('ms-fStage', stages, getMSValues('ms-fStage'));
 }
 function getFilteredDetail(){
-  const s=document.getElementById('fStage').value,m=document.getElementById('fMaterial').value,mach=document.getElementById('fMachine').value;
-  const q=(document.getElementById('fSearch').value||'').toLowerCase().trim();
+  const sVals=document.getElementById('fSearch').value.toLowerCase().trim();
+  const selMachines=getMSValues('ms-fMachine').map(x=>x.toLowerCase());
+  const selMaterials=getMSValues('ms-fMaterial').map(x=>x.toLowerCase());
+  const selStages=getMSValues('ms-fStage').map(x=>x.toLowerCase());
+
   return S.detail.filter(d=>{
-    if(s&&d.bomStage!==s)return false;
-    if(m&&d.material!==m)return false;
-    if(mach&&d.machine!==mach)return false;
-    if(q){const hay=[d.job,d.item,d.material,d.machine,d.bomStage,d.matDesc,d.planStage,d.colour,d.matCode].join(' ').toLowerCase();if(!hay.includes(q))return false}
+    if(selStages.length>0 && !selStages.includes(d.bomStage.toLowerCase()))return false;
+    if(selMaterials.length>0 && !selMaterials.includes(d.material.toLowerCase()))return false;
+    if(selMachines.length>0 && !selMachines.includes(d.machine.toLowerCase()))return false;
+    if(sVals){const hay=[d.job,d.item,d.material,d.machine,d.bomStage,d.matDesc,d.planStage,d.colour,d.matCode].join(' ').toLowerCase();if(!hay.includes(sVals))return false}
     return true;
   });
 }
@@ -603,7 +697,12 @@ function renderDetail(){
   if(!rows.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No rows match filters</div>';return}
   el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>#</th><th>Job</th><th>Item</th><th>Plan Stage</th><th style="text-align:right">Qty (m)</th><th>BOM Stage</th><th>Material</th><th>Colour</th><th>Machine</th><th>Code</th><th>Description</th><th style="text-align:right">Rate</th><th style="text-align:right">Required (kg)</th></tr></thead><tbody>${rows.map(d=>`<tr><td>${d.seq}</td><td>${esc(d.job)}</td><td>${esc(d.item)}</td><td>${esc(d.planStage)}</td><td class="num">${d.qty}</td><td>${esc(d.bomStage)}</td><td>${esc(d.material)}</td><td>${esc(d.colour)||'—'}</td><td>${esc(d.machine)||'—'}</td><td>${esc(d.matCode)}</td><td>${esc(d.matDesc)}</td><td class="num">${d.rate.toFixed(3)}</td><td class="num"><strong>${d.required.toFixed(3)}</strong></td></tr>`).join('')}</tbody></table></div>`;
 }
-function clearFilters(){['fSearch','fStage','fMaterial','fMachine'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderDetail()}
+function clearFilters(){
+  document.getElementById('fSearch').value='';
+  document.querySelectorAll('#ms-fMachine-list input, #ms-fMaterial-list input, #ms-fStage-list input').forEach(i=>i.checked=false);
+  updateMSHeader('ms-fMachine'); updateMSHeader('ms-fMaterial'); updateMSHeader('ms-fStage');
+  renderDetail();
+}
 
 function renderWarns(){const el=document.getElementById('warnOut');if(!S.warns.length){el.innerHTML='<div class="empty"><span class="icon">✅</span>No warnings</div>';return}el.innerHTML=S.warns.map(w=>`<div class="warn ${w.level}"><span class="ico">${w.level==='error'?'✕':'!'}</span><span>${esc(w.msg)}</span></div>`).join('')}
 
