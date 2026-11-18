@@ -1,4 +1,4 @@
-const VERSION = 'v1.0.2';
+const VERSION = 'v1.0.1';
 const SHELL_CACHE = `bom-shell-${VERSION}`;
 const DATA_CACHE = `bom-data-${VERSION}`;
 
