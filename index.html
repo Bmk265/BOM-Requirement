@@ -60,19 +60,10 @@ h2{font-size:15px;font-weight:600;margin-bottom:4px}
 .filter-bar select{min-width:150px;max-width:220px}
 .filter-bar .fcount{color:var(--tx3);font-size:11.5px;margin-left:auto;font-weight:500}
 .filter-bar .flabel{font-size:10.5px;font-weight:600;color:var(--tx2);text-transform:uppercase;letter-spacing:.4px}
-.filter-bar .ms{position:relative;min-width:170px;max-width:240px}
-.filter-bar .ms-btn{width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;background:#fff;font-size:12px;font-family:inherit;text-align:left;cursor:pointer;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.filter-bar .ms-btn:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 2px var(--acbg)}
-.filter-bar .ms-pop{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;max-height:240px;overflow:auto;background:#fff;border:1px solid var(--bd2);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:300;padding:6px}
-.filter-bar .ms.open .ms-pop{display:block}
-.filter-bar .ms-pop label{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:5px;font-size:12px;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--tx)}
-.filter-bar .ms-pop label:hover{background:var(--bg)}
-.filter-bar .ms-pop input{accent-color:var(--ac);cursor:pointer}
-.filter-bar .ms-pop .ms-none{color:var(--tx3);font-size:11.5px;padding:6px}
 .grid-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
 .grid-toolbar .count{color:var(--tx3);font-size:11.5px;margin-left:auto;font-weight:500}
 .grid-wrap{max-height:520px;overflow:auto;border:1px solid var(--bd);border-radius:8px;background:var(--card)}
-.grid-table{min-width:1050px;width:100%;border-collapse:separate;border-spacing:0;font-size:12px;table-layout:fixed}
+.grid-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;table-layout:fixed}
 .grid-table th{background:var(--bg);padding:9px 10px;text-align:left;font-weight:600;font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.3px;position:sticky;top:0;z-index:2;border-bottom:1px solid var(--bd2);white-space:nowrap;user-select:none}
 .grid-table td{border-bottom:1px solid var(--bd);border-right:1px solid var(--bd);vertical-align:top}
 .grid-table tr:last-child td{border-bottom:none}
@@ -135,24 +126,6 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 .toast.ok{background:var(--ok)}
 .toast.err{background:var(--er)}
 
-/* ── EXCEL STYLE COLUMN FILTERS ────────────────────────── */
-.th-filter-wrap{display:flex;align-items:center;gap:6px;width:100%}
-.th-filter-btn{background:transparent;border:none;color:var(--tx3);cursor:pointer;font-size:10px;padding:2px 4px;border-radius:3px;margin-left:auto;transition:all .15s}
-.th-filter-btn:hover{background:var(--bd);color:var(--tx)}
-.th-filter-btn.active{color:var(--ac);background:var(--acbg)}
-.excel-pop{display:none;position:fixed;width:240px;max-height:360px;background:#fff;border:1px solid var(--bd2);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.15);z-index:1000;flex-direction:column;overflow:hidden;text-transform:none;letter-spacing:normal;font-weight:normal}
-.excel-pop.open{display:flex}
-.excel-pop-search{padding:8px;border-bottom:1px solid var(--bd)}
-.excel-pop-search input{width:100%;padding:6px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px}
-.excel-pop-search input:focus{outline:none;border-color:var(--ac)}
-.excel-pop-list{flex:1;overflow:auto;padding:6px}
-.excel-pop-list label{display:flex;align-items:center;gap:8px;padding:4px 8px;font-size:12px;cursor:pointer;border-radius:4px;color:var(--tx)}
-.excel-pop-list label:hover{background:var(--bg)}
-.excel-pop-list input[type="checkbox"]{accent-color:var(--ac);cursor:pointer;margin:0}
-.excel-pop-footer{display:flex;justify-content:space-between;padding:8px;border-top:1px solid var(--bd);background:var(--bg)}
-.excel-pop-footer button{background:transparent;border:none;color:var(--ac);font-size:12px;cursor:pointer;font-weight:500}
-.excel-pop-footer button:hover{text-decoration:underline}
-
 /* ── PRINT HELPERS (screen) ─────────────────────────────── */
 .print-header{display:none}
 .print-footer{display:none}
@@ -162,7 +135,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 @page { size: A4 portrait; margin: 10mm; }
 
 @media print{
-  header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar,h2,header h1,header .logo,header .user-info,.empty,.btn-row,.github-loader,.th-filter-btn,.excel-pop{display:none!important}
+  header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar,h2,.empty{display:none!important}
   body{background:#fff;font-size:9px}
   main{padding:0;width:100%}
   .card{box-shadow:none;border:none;padding:0;margin:0}
@@ -180,30 +153,9 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 
   .table-wrap{max-height:none;overflow:visible;border:none}
 
-  /* ── Print header: title left, date top-right ───────────── */
-  .print-header{
-    display:block!important;
-    position:relative;
-    margin:0 0 8px;
-    padding:0 0 6px;
-    border-bottom:2px solid #000;
-  }
-  .print-header .ph-title{
-    font-size:15px;
-    font-weight:700;
-    color:#000;
-    text-align:left;
-    line-height:1.25;
-    padding-right:140px;
-  }
-  .print-header .ph-sub{
-    position:absolute;
-    top:0;
-    right:0;
-    font-size:9.5px;
-    color:#333;
-    white-space:nowrap;
-  }
+  .print-header{display:block;text-align:center;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #000}
+  .print-header .ph-title{font-size:16px;font-weight:700;color:#000}
+  .print-header .ph-sub{font-size:10px;color:#333;margin-top:2px}
 
   .print-footer{
     display:flex;justify-content:space-between;
@@ -260,7 +212,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 </nav>
 <main>
 <div class="print-header" id="printHeader">
-  <div class="ph-title" id="phTitle">Total Raw Material Requirement</div>
+  <div class="ph-title">BOM Requirement</div>
   <div class="ph-sub" id="phSub"></div>
 </div>
 <div class="print-footer" id="printFooter">
@@ -279,27 +231,10 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   </div>
   <div class="drop-zone" id="bomDrop"><span class="icon">📄</span><div><div class="title">Or upload BOM file / click</div><div class="sub">.csv / .xlsx / .xls</div></div></div>
   <input type="file" id="bomFile" accept=".csv,.xlsx,.xls" style="display:none">
-  <div class="filter-bar no-print">
-    <span class="flabel">Global Search</span>
-    <input type="text" id="bSearch" placeholder="Search across all columns…" oninput="renderBomGrid()">
-    <button class="btn sec sm" onclick="clearBomFilters()">Clear Filters</button>
-    <span class="fcount" id="bCount"></span>
-  </div>
   <div class="grid-toolbar"><button class="btn sec sm" onclick="addBomRow()">+ Add row</button><button class="btn sec sm" onclick="clearBomGrid()">Clear all</button><span class="count" id="bomCount">0 rows</span></div>
   <div class="grid-wrap"><table class="grid-table" id="bomGridTable">
     <colgroup><col style="width:38px"><col style="width:110px"><col style="width:70px"><col style="width:200px"><col style="width:100px"><col style="width:100px"><col style="width:240px"><col style="width:220px"><col style="width:90px"><col style="width:36px"></colgroup>
-    <thead><tr>
-      <th class="rownum">#</th>
-      <th><div class="th-filter-wrap">SALES ORDER <button class="th-filter-btn" data-col="0">▼</button></div></th>
-      <th><div class="th-filter-wrap">ITEM <button class="th-filter-btn" data-col="1">▼</button></div></th>
-      <th><div class="th-filter-wrap">OPERATION JDM <button class="th-filter-btn" data-col="2">▼</button></div></th>
-      <th style="text-align:right"><div class="th-filter-wrap" style="justify-content:flex-end">BOM/KM - JDM <button class="th-filter-btn" data-col="3">▼</button></div></th>
-      <th><div class="th-filter-wrap">MATERIAL CODE <button class="th-filter-btn" data-col="4">▼</button></div></th>
-      <th><div class="th-filter-wrap">MATERIAL DISC <button class="th-filter-btn" data-col="5">▼</button></div></th>
-      <th><div class="th-filter-wrap">SIZE <button class="th-filter-btn" data-col="6">▼</button></div></th>
-      <th><div class="th-filter-wrap">COLOUR <button class="th-filter-btn" data-col="7">▼</button></div></th>
-      <th></th>
-    </tr></thead>
+    <thead><tr><th class="rownum">#</th><th>SALES ORDER</th><th>ITEM</th><th>OPERATION JDM</th><th style="text-align:right">BOM/KM - JDM</th><th>MATERIAL CODE</th><th>MATERIAL DISC</th><th>SIZE</th><th>COLOUR</th><th></th></tr></thead>
     <tbody id="bomGridBody"></tbody>
   </table></div>
   <div id="bomStatus"></div>
@@ -358,9 +293,9 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   <div class="filter-bar no-print">
     <span class="flabel">Filter</span>
     <input type="text" id="tSearch" placeholder="Search material, colour, job, stage…" oninput="renderTotal()">
-    <div class="ms" id="msTStage"><button class="ms-btn" type="button" onclick="toggleMS('msTStage')">All stages</button><div class="ms-pop" id="msTStagePop"></div></div>
-    <div class="ms" id="msTMachine"><button class="ms-btn" type="button" onclick="toggleMS('msTMachine')">All machines</button><div class="ms-pop" id="msTMachinePop"></div></div>
-    <div class="ms" id="msTJob"><button class="ms-btn" type="button" onclick="toggleMS('msTJob')">All jobs</button><div class="ms-pop" id="msTJobPop"></div></div>
+    <select id="tStage" onchange="renderTotal()"><option value="">All stages</option></select>
+    <select id="tMachine" onchange="renderTotal()"><option value="">All machines</option></select>
+    <select id="tJob" onchange="renderTotal()"><option value="">All jobs</option></select>
     <button class="btn sec sm" onclick="clearTotalFilters()">Clear</button>
     <span class="fcount" id="tCount"></span>
   </div>
@@ -376,9 +311,9 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
   <div class="filter-bar no-print">
     <span class="flabel">Filter</span>
     <input type="text" id="fSearch" placeholder="Search job, item, material, machine, code…" oninput="renderDetail()">
-    <div class="ms" id="msFMachine"><button class="ms-btn" type="button" onclick="toggleMS('msFMachine')">All machines</button><div class="ms-pop" id="msFMachinePop"></div></div>
-    <div class="ms" id="msFMaterial"><button class="ms-btn" type="button" onclick="toggleMS('msFMaterial')">All materials</button><div class="ms-pop" id="msFMaterialPop"></div></div>
-    <div class="ms" id="msFStage"><button class="ms-btn" type="button" onclick="toggleMS('msFStage')">All stages</button><div class="ms-pop" id="msFStagePop"></div></div>
+    <select id="fMachine" onchange="renderDetail()"><option value="">All machines</option></select>
+    <select id="fMaterial" onchange="renderDetail()"><option value="">All materials</option></select>
+    <select id="fStage" onchange="renderDetail()"><option value="">All stages</option></select>
     <button class="btn sec sm" onclick="clearFilters()">Clear</button>
     <span class="fcount" id="fCount"></span>
   </div>
@@ -474,166 +409,21 @@ function isPlanHeader(r){if(!r)return false;return /^stage$/i.test((r[0]||'').tr
 
 /* BOM GRID */
 const BOM_COLS=[{ph:'338607'},{ph:'4'},{ph:'ARMORING'},{ph:'32.553',num:true},{ph:'10000076'},{ph:'GALVANISED STEEL WIRE 0.8 MM'},{ph:'1PX1.50SQ.MM BRD-ARM CABLE'},{ph:''}];
-function isBomFilterActive(){const el=document.getElementById('bSearch');return !!(el&&el.value.trim()) || Object.values(BOM_COL_FILTERS).some(s=>s.size>0)}
-function addBomRow(data){const body=document.getElementById('bomGridBody');const tr=document.createElement('tr');tr.innerHTML=`<td class="rownum">${body.children.length+1}</td>`+BOM_COLS.map((c,i)=>{const v=data?(data[i]||''):'';const editable=!isBomFilterActive();return `<td ${editable?'contenteditable="true"':''} data-col="${i}" data-ph="${esc(c.ph)}" class="${c.num?'num':''}">${esc(v)}</td>`}).join('')+`<td class="actions"><button class="del-btn" title="Delete">×</button></td>`;tr.querySelector('.del-btn').onclick=()=>{tr.remove();if(!body.children.length)addBomRow();renumberBom();updateBomCount();saveBomToStorage();refreshStages()};tr.querySelectorAll('td[contenteditable]').forEach(td=>{td.addEventListener('input',()=>{if(isBomFilterActive())return;if(tr===body.lastElementChild&&hasContent(tr))addBomRow();updateBomCount();saveBomToStorage();refreshStages()});td.addEventListener('keydown',e=>navKey(e,td,addBomRow))});body.appendChild(tr);return tr}
+function addBomRow(data){const body=document.getElementById('bomGridBody');const tr=document.createElement('tr');tr.innerHTML=`<td class="rownum">${body.children.length+1}</td>`+BOM_COLS.map((c,i)=>{const v=data?(data[i]||''):'';return `<td contenteditable="true" data-col="${i}" data-ph="${esc(c.ph)}" class="${c.num?'num':''}">${esc(v)}</td>`}).join('')+`<td class="actions"><button class="del-btn" title="Delete">×</button></td>`;tr.querySelector('.del-btn').onclick=()=>{tr.remove();if(!body.children.length)addBomRow();renumberBom();updateBomCount();saveBomToStorage();refreshStages()};tr.querySelectorAll('td[contenteditable]').forEach(td=>{td.addEventListener('input',()=>{if(tr===body.lastElementChild&&hasContent(tr))addBomRow();updateBomCount();saveBomToStorage();refreshStages()});td.addEventListener('keydown',e=>navKey(e,td,addBomRow))});body.appendChild(tr);return tr}
 function renumberBom(){document.querySelectorAll('#bomGridBody tr').forEach((tr,i)=>{tr.querySelector('.rownum').textContent=i+1})}
 function updateBomCount(){const n=Array.from(document.querySelectorAll('#bomGridBody tr')).filter(hasContent).length;document.getElementById('bomCount').textContent=n+' row'+(n===1?'':'s')}
-function saveBomToStorage(){if(isBomFilterActive())return;const body=document.getElementById('bomGridBody');const rows=Array.from(body.children).map(tr=>Array.from(tr.querySelectorAll('td[contenteditable]')).map(c=>c.textContent)).filter(r=>r.some(c=>c.trim()));localStorage.setItem(LS_BOM,JSON.stringify(rows))}
+function saveBomToStorage(){const body=document.getElementById('bomGridBody');const rows=Array.from(body.children).map(tr=>Array.from(tr.querySelectorAll('td[contenteditable]')).map(c=>c.textContent)).filter(r=>r.some(c=>c.trim()));localStorage.setItem(LS_BOM,JSON.stringify(rows))}
 function clearBomGrid(){if(!confirm('Clear BOM rows?'))return;document.getElementById('bomGridBody').innerHTML='';for(let i=0;i<2;i++)addBomRow();renumberBom();updateBomCount();saveBomToStorage();document.getElementById('bomStatus').innerHTML='';refreshStages()}
 function initBomGrid(){document.getElementById('bomGridBody').innerHTML='';for(let i=0;i<2;i++)addBomRow();renumberBom();updateBomCount()}
-function restoreBom(){try{const s=localStorage.getItem(LS_BOM);if(!s){initBomGrid();renderBomGrid();refreshStages();return}const rows=JSON.parse(s);const body=document.getElementById('bomGridBody');body.innerHTML='';if(!rows.length){for(let i=0;i<2;i++)addBomRow()}else{rows.forEach(r=>addBomRow(r));addBomRow()}renumberBom();updateBomCount();renderBomGrid();refreshStages()}catch(e){initBomGrid();renderBomGrid();refreshStages()}}
+function restoreBom(){try{const s=localStorage.getItem(LS_BOM);if(!s){initBomGrid();refreshStages();return}const rows=JSON.parse(s);const body=document.getElementById('bomGridBody');body.innerHTML='';if(!rows.length){for(let i=0;i<2;i++)addBomRow()}else{rows.forEach(r=>addBomRow(r));addBomRow()}renumberBom();updateBomCount();refreshStages()}catch(e){initBomGrid();refreshStages()}}
 function getBomData(){const body=document.getElementById('bomGridBody');const out=[];Array.from(body.children).forEach(tr=>{if(!hasContent(tr))return;const c=Array.from(tr.querySelectorAll('td[contenteditable]')).map(x=>x.textContent.trim());const rate=parseFloat(c[3]);if(!c[0]||!c[1]||!c[2]||isNaN(rate))return;out.push({job:c[0],item:c[1],stage:c[2],stageNorm:nStage(c[2]),rate,matCode:c[4]||'',material:c[5]||'',matDesc:c[6]||'',colour:c[7]||''})});return out}
 document.getElementById('bomGridTable').addEventListener('paste',e=>{const t=(e.clipboardData||window.clipboardData).getData('text');if(!t)return;e.preventDefault();pasteBom(t)});
-function pasteBom(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));const h=rows[0]||[];const map={job:idxOf(h,['sales order']),item:idxOf(h,['item']),stage:idxOf(h,['operation jdm']),rate:idxOf(h,['bom/km - jdm','bom/km']),matCode:idxOf(h,['material code']),material:idxOf(h,['material disc']),matDesc:idxOf(h,['size']),colour:idxOf(h,['colour','color'])};if(map.job<0||map.item<0||map.stage<0||map.rate<0)return alert('BOM paste needs header:\nSALES ORDER · ITEM · OPERATION JDM · BOM/KM - JDM');rows.shift();const dataRows=rows.filter(r=>r.some(c=>c&&c.toString().trim())).map(r=>[r[map.job]||'',r[map.item]||'',r[map.stage]||'',r[map.rate]||'',map.matCode>=0?(r[map.matCode]||''):'',map.material>=0?(r[map.material]||''):'',map.matDesc>=0?(r[map.matDesc]||''):'',map.colour>=0?(r[map.colour]||''):'']);if(!dataRows.length)return alert('No data rows');const body=document.getElementById('bomGridBody');body.innerHTML='';dataRows.forEach(r=>addBomRow(r));addBomRow();renumberBom();updateBomCount();saveBomToStorage();renderBomGrid();refreshStages();document.getElementById('bomStatus').innerHTML=`<div class="summary">✅ Parsed ${dataRows.length} BOM rows</div>`}
+function pasteBom(text){const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return;let rows=lines.map(l=>parseTSVLine(l));const h=rows[0]||[];const map={job:idxOf(h,['sales order']),item:idxOf(h,['item']),stage:idxOf(h,['operation jdm']),rate:idxOf(h,['bom/km - jdm','bom/km']),matCode:idxOf(h,['material code']),material:idxOf(h,['material disc']),matDesc:idxOf(h,['size']),colour:idxOf(h,['colour','color'])};if(map.job<0||map.item<0||map.stage<0||map.rate<0)return alert('BOM paste needs header:\nSALES ORDER · ITEM · OPERATION JDM · BOM/KM - JDM');rows.shift();const dataRows=rows.filter(r=>r.some(c=>c&&c.toString().trim())).map(r=>[r[map.job]||'',r[map.item]||'',r[map.stage]||'',r[map.rate]||'',map.matCode>=0?(r[map.matCode]||''):'',map.material>=0?(r[map.material]||''):'',map.matDesc>=0?(r[map.matDesc]||''):'',map.colour>=0?(r[map.colour]||''):'']);if(!dataRows.length)return alert('No data rows');const body=document.getElementById('bomGridBody');body.innerHTML='';dataRows.forEach(r=>addBomRow(r));addBomRow();renumberBom();updateBomCount();saveBomToStorage();refreshStages();document.getElementById('bomStatus').innerHTML=`<div class="summary">✅ Parsed ${dataRows.length} BOM rows</div>`}
 function idxOf(h,pats){for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x===p))return i}for(let i=0;i<h.length;i++){const x=(h[i]||'').toLowerCase().trim();if(pats.some(p=>x.includes(p)))return i}return -1}
-
-/* BOM GRID FILTER (EXCEL STYLE) */
-const BOM_COL_FILTERS={0:new Set(),1:new Set(),2:new Set(),3:new Set(),4:new Set(),5:new Set(),6:new Set(),7:new Set()};
-let ACTIVE_COL_POP=null;
-
-function closeExcelPops(){
-  if(ACTIVE_COL_POP){ACTIVE_COL_POP.classList.remove('open');ACTIVE_COL_POP=null}
-}
-document.addEventListener('click', e=>{
-  if(!e.target.closest('.excel-pop') && !e.target.closest('.th-filter-btn')) closeExcelPops();
-});
-
-function openColFilter(colIdx, btnEl){
-  closeExcelPops();
-  // Read all data from storage so we see all unique values
-  let all=[];
-  try{const s=localStorage.getItem(LS_BOM);if(s)all=JSON.parse(s)}catch(e){}
-  all=all.filter(r=>r.some(c=>c.trim()));
-
-  // Extract unique values for this col
-  const uniq=[...new Set(all.map(r=>String(r[colIdx]||'').trim()).filter(Boolean))].sort();
-
-  // Build popup
-  const pop=document.createElement('div');
-  pop.className='excel-pop';
-  
-  pop.innerHTML=`
-    <div class="excel-pop-search"><input type="text" placeholder="Search values..." id="excelSearchInput"></div>
-    <div class="excel-pop-list" id="excelPopList">
-      ${uniq.map(v=>`<label><input type="checkbox" value="${esc(v)}" ${BOM_COL_FILTERS[colIdx].has(v)?'checked':''}> ${esc(v)}</label>`).join('')}
-      ${uniq.length?'':'<div style="padding:10px;font-size:12px;color:#94a3b8">No items</div>'}
-    </div>
-    <div class="excel-pop-footer">
-      <button onclick="clearColFilter(${colIdx},this)">Clear</button>
-      <button onclick="closeExcelPops()" style="font-weight:700">Apply</button>
-    </div>
-  `;
-
-  document.body.appendChild(pop);
-  ACTIVE_COL_POP=pop;
-
-  // Position popup below the button
-  const rect=btnEl.getBoundingClientRect();
-  pop.style.top=(rect.bottom+4)+'px';
-  pop.style.left=Math.max(10, Math.min(rect.left, window.innerWidth-250))+'px';
-  
-  // Re-center if it overflows right
-  requestAnimationFrame(()=>{
-    const pr=pop.getBoundingClientRect();
-    if(pr.right>window.innerWidth-10) pop.style.left=(window.innerWidth-pr.width-10)+'px';
-  });
-
-  pop.classList.add('open');
-  btnEl.classList.add('active');
-
-  // Wire up interactions
-  pop.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
-    cb.onchange=()=>{
-      if(cb.checked) BOM_COL_FILTERS[colIdx].add(cb.value);
-      else BOM_COL_FILTERS[colIdx].delete(cb.value);
-      renderBomGrid();
-    };
-  });
-
-  const searchInput=pop.querySelector('#excelSearchInput');
-  searchInput.oninput=()=>{
-    const q=searchInput.value.toLowerCase();
-    pop.querySelectorAll('.excel-pop-list label').forEach(l=>{
-      const v=l.textContent.trim().toLowerCase();
-      l.style.display=v.includes(q)?'flex':'none';
-    });
-  };
-  searchInput.focus();
-}
-
-function clearColFilter(colIdx, btnEl){
-  BOM_COL_FILTERS[colIdx].clear();
-  closeExcelPops();
-  renderBomGrid();
-}
-
-function clearBomFilters(){
-  document.getElementById('bSearch').value='';
-  Object.keys(BOM_COL_FILTERS).forEach(k=>BOM_COL_FILTERS[k].clear());
-  document.querySelectorAll('.th-filter-btn').forEach(b=>b.classList.remove('active'));
-  renderBomGrid();
-}
-
-function renderBomGrid(){
-  const body=document.getElementById('bomGridBody');
-  const q=(document.getElementById('bSearch').value||'').toLowerCase().trim();
-  
-  // Highlight active filter buttons
-  document.querySelectorAll('.th-filter-btn').forEach(btn=>{
-    const c=+btn.dataset.col;
-    if(BOM_COL_FILTERS[c].size>0) btn.classList.add('active');
-    else btn.classList.remove('active');
-  });
-
-  let all=[];
-  try{const s=localStorage.getItem(LS_BOM);if(s)all=JSON.parse(s)}catch(e){}
-  all=all.filter(r=>r.some(c=>c.trim()));
-
-  // Apply global search AND col filters
-  const shown=all.filter(r=>{
-    // 1. Global search
-    if(q && !r.join(' ').toLowerCase().includes(q)) return false;
-    // 2. Column specific filters
-    for(let i=0;i<8;i++){ // check cols 0-7
-      const f=BOM_COL_FILTERS[i];
-      if(f.size>0){
-        const val=String(r[i]||'').trim();
-        if(!f.has(val)) return false;
-      }
-    }
-    return true;
-  });
-
-  body.innerHTML='';
-  if(!all.length){for(let i=0;i<2;i++)addBomRow()}
-  else{shown.forEach(r=>addBomRow(r));if(!q && !Object.values(BOM_COL_FILTERS).some(s=>s.size>0))addBomRow()}
-  renumberBom();updateBomCount();
-  const cEl=document.getElementById('bCount');if(cEl)cEl.textContent=`${shown.length} of ${all.length} rows`;
-}
-
-document.querySelectorAll('.th-filter-btn').forEach(btn=>{
-  btn.onclick=(e)=>{e.stopPropagation();openColFilter(+btn.dataset.col, btn)};
-});
 
 /* FILE + GITHUB */
 function wireDrop(zoneId,inputId,handler){const z=document.getElementById(zoneId),i=document.getElementById(inputId);z.onclick=()=>i.click();z.ondragover=e=>{e.preventDefault();z.classList.add('drag')};z.ondragleave=()=>z.classList.remove('drag');z.ondrop=e=>{e.preventDefault();z.classList.remove('drag');if(e.dataTransfer.files.length)readFile(e.dataTransfer.files[0],handler)};i.onchange=e=>{if(e.target.files[0])readFile(e.target.files[0],handler);i.value=''}}
-async function readFile(f,handler){
-  if(f.name.toLowerCase().endsWith('.csv')){
-    // 1. Read the file as raw bytes (ArrayBuffer)
-    const buffer = await f.arrayBuffer();
-    
-    // 2. Decode it using windows-1252 to correctly capture the '±' symbol
-    const decoder = new TextDecoder('windows-1252');
-    const text = decoder.decode(buffer);
-    
-    handler(parseDelim(text));
-  }else{
-    const b=await f.arrayBuffer();
-    const wb=XLSX.read(b,{type:'array'});
-    const ws=wb.Sheets[wb.SheetNames[0]];
-    handler(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))
-  }
-}
+async function readFile(f,handler){if(f.name.toLowerCase().endsWith('.csv')){handler(parseDelim(await f.text()))}else{const b=await f.arrayBuffer();const wb=XLSX.read(b,{type:'array'});const ws=wb.Sheets[wb.SheetNames[0]];handler(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))}}
 function handleBomFile(rows){if(!rows.length)return alert('Empty file');const tsv=rows.map(r=>r.map(c=>(c==null?'':String(c))).join('\t')).join('\n');pasteBom(tsv)}
 function handlePlanFile(rows){if(!rows.length)return alert('Empty file');let data=rows;if(isPlanHeader(rows[0]))data=rows.slice(1);const body=document.getElementById('planGridBody');body.innerHTML='';data.forEach(r=>addPlanRow(r.map(c=>c==null?'':String(c))));addPlanRow();renumberPlan();updatePlanCount();savePlanToStorage();document.getElementById('planStatus').innerHTML=`<div class="summary">✅ Loaded ${data.length} planning rows</div>`}
 function toRawUrl(u){u=u.trim();if(u.includes('raw.githubusercontent.com'))return u;const m=u.match(/^https?:\/\/github\.com\/([^\/]+)\/([^\/]+)\/(?:blob|raw)\/(.+)$/);if(m)return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}`;return u}
@@ -739,45 +529,23 @@ function generate(){
   go('total')
 }
 
-/* MULTI-SELECT HELPERS */
-const MS_STATE={msTStage:new Set(),msTMachine:new Set(),msTJob:new Set(),msFMachine:new Set(),msFMaterial:new Set(),msFStage:new Set()};
-function toggleMS(id){
-  document.querySelectorAll('.ms.open').forEach(x=>{if(x.id!==id)x.classList.remove('open')});
-  document.getElementById(id).classList.toggle('open');
-}
-document.addEventListener('click',e=>{if(!e.target.closest('.ms'))document.querySelectorAll('.ms.open').forEach(x=>x.classList.remove('open'))});
-function renderMS(id,values,onChange){
-  const wrap=document.getElementById(id);if(!wrap)return;
-  const pop=document.getElementById(id+'Pop');
-  const sel=MS_STATE[id];
-  pop.innerHTML=values.length?values.map(v=>`<label><input type="checkbox" value="${esc(v)}" ${sel.has(v)?'checked':''}> ${esc(v)}</label>`).join(''):'<div class="ms-none">No options</div>';
-  pop.querySelectorAll('input').forEach(cb=>cb.onchange=()=>{cb.checked?sel.add(cb.value):sel.delete(cb.value);updateMSLabel(id);onChange()});
-  updateMSLabel(id);
-}
-function updateMSLabel(id){
-  const wrap=document.getElementById(id);if(!wrap)return;
-  const btn=wrap.querySelector('.ms-btn'),sel=MS_STATE[id];
-  const def={msTStage:'All stages',msTMachine:'All machines',msTJob:'All jobs',msFMachine:'All machines',msFMaterial:'All materials',msFStage:'All stages'}[id];
-  btn.textContent=sel.size===0?def:(sel.size===1?[...sel][0]:`${sel.size} selected`);
-}
-
 /* DAILY TOTAL with filters */
 function populateTotalDropdowns(){
+  const sSel=document.getElementById('tStage').value,mSel=document.getElementById('tMachine').value,jSel=document.getElementById('tJob').value;
   const stages=[...new Set(S.detail.map(d=>d.bomStage).filter(Boolean))].sort();
   const machines=[...new Set(S.detail.map(d=>d.machine).filter(Boolean))].sort();
   const jobs=[...new Set(S.detail.map(d=>d.job).filter(Boolean))].sort();
-  [['msTStage',stages],['msTMachine',machines],['msTJob',jobs]].forEach(([id,vals])=>{const s=MS_STATE[id];[...s].forEach(v=>{if(!vals.includes(v))s.delete(v)})});
-  renderMS('msTStage',stages,renderTotal);
-  renderMS('msTMachine',machines,renderTotal);
-  renderMS('msTJob',jobs,renderTotal);
+  document.getElementById('tStage').innerHTML='<option value="">All stages</option>'+stages.map(x=>`<option${x===sSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('tMachine').innerHTML='<option value="">All machines</option>'+machines.map(x=>`<option${x===mSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('tJob').innerHTML='<option value="">All jobs</option>'+jobs.map(x=>`<option${x===jSel?' selected':''}>${esc(x)}</option>`).join('');
 }
 function getFilteredForTotal(){
+  const s=document.getElementById('tStage').value,m=document.getElementById('tMachine').value,j=document.getElementById('tJob').value;
   const q=(document.getElementById('tSearch').value||'').toLowerCase().trim();
-  const ss=MS_STATE.msTStage,mm=MS_STATE.msTMachine,jj=MS_STATE.msTJob;
   return S.detail.filter(d=>{
-    if(ss.size&&!ss.has(d.bomStage))return false;
-    if(mm.size&&!mm.has(d.machine))return false;
-    if(jj.size&&!jj.has(d.job))return false;
+    if(s&&d.bomStage!==s)return false;
+    if(m&&d.machine!==m)return false;
+    if(j&&d.job!==j)return false;
     if(q){const hay=[d.material,d.colour,d.job,d.bomStage,d.machine,d.matCode,d.matDesc].join(' ').toLowerCase();if(!hay.includes(q))return false}
     return true;
   });
@@ -803,25 +571,25 @@ function renderTotal(){
   if(!agg.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No materials match filters</div>';return}
   el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th class="col-jobs">Jobs</th><th class="col-codes">Material Code</th><th>Stages</th></tr></thead><tbody>${agg.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td class="col-jobs">${esc(t.jobs)}</td><td class="col-codes">${esc(t.codes)||'—'}</td><td>${esc(t.stages)}</td></tr>`).join('')}</tbody></table></div>`;
 }
-function clearTotalFilters(){document.getElementById('tSearch').value='';['msTStage','msTMachine','msTJob'].forEach(id=>{MS_STATE[id].clear();updateMSLabel(id)});renderTotal()}
+function clearTotalFilters(){['tSearch','tStage','tMachine','tJob'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderTotal()}
 
 /* PER-ROW DETAIL with filters */
 function populateDetailDropdowns(){
+  const sSel=document.getElementById('fStage').value,mSel=document.getElementById('fMaterial').value,machSel=document.getElementById('fMachine').value;
   const stages=[...new Set(S.detail.map(d=>d.bomStage).filter(Boolean))].sort();
   const materials=[...new Set(S.detail.map(d=>d.material).filter(Boolean))].sort();
   const machines=[...new Set(S.detail.map(d=>d.machine).filter(Boolean))].sort();
-  [['msFStage',stages],['msFMaterial',materials],['msFMachine',machines]].forEach(([id,vals])=>{const s=MS_STATE[id];[...s].forEach(v=>{if(!vals.includes(v))s.delete(v)})});
-  renderMS('msFStage',stages,renderDetail);
-  renderMS('msFMaterial',materials,renderDetail);
-  renderMS('msFMachine',machines,renderDetail);
+  document.getElementById('fStage').innerHTML='<option value="">All stages</option>'+stages.map(x=>`<option${x===sSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('fMaterial').innerHTML='<option value="">All materials</option>'+materials.map(x=>`<option${x===mSel?' selected':''}>${esc(x)}</option>`).join('');
+  document.getElementById('fMachine').innerHTML='<option value="">All machines</option>'+machines.map(x=>`<option${x===machSel?' selected':''}>${esc(x)}</option>`).join('');
 }
 function getFilteredDetail(){
+  const s=document.getElementById('fStage').value,m=document.getElementById('fMaterial').value,mach=document.getElementById('fMachine').value;
   const q=(document.getElementById('fSearch').value||'').toLowerCase().trim();
-  const ss=MS_STATE.msFStage,mm=MS_STATE.msFMaterial,mach=MS_STATE.msFMachine;
   return S.detail.filter(d=>{
-    if(ss.size&&!ss.has(d.bomStage))return false;
-    if(mm.size&&!mm.has(d.material))return false;
-    if(mach.size&&!mach.has(d.machine))return false;
+    if(s&&d.bomStage!==s)return false;
+    if(m&&d.material!==m)return false;
+    if(mach&&d.machine!==mach)return false;
     if(q){const hay=[d.job,d.item,d.material,d.machine,d.bomStage,d.matDesc,d.planStage,d.colour,d.matCode].join(' ').toLowerCase();if(!hay.includes(q))return false}
     return true;
   });
@@ -835,20 +603,20 @@ function renderDetail(){
   if(!rows.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No rows match filters</div>';return}
   el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>#</th><th>Job</th><th>Item</th><th>Plan Stage</th><th style="text-align:right">Qty (m)</th><th>BOM Stage</th><th>Material</th><th>Colour</th><th>Machine</th><th>Code</th><th>Description</th><th style="text-align:right">Rate</th><th style="text-align:right">Required (kg)</th></tr></thead><tbody>${rows.map(d=>`<tr><td>${d.seq}</td><td>${esc(d.job)}</td><td>${esc(d.item)}</td><td>${esc(d.planStage)}</td><td class="num">${d.qty}</td><td>${esc(d.bomStage)}</td><td>${esc(d.material)}</td><td>${esc(d.colour)||'—'}</td><td>${esc(d.machine)||'—'}</td><td>${esc(d.matCode)}</td><td>${esc(d.matDesc)}</td><td class="num">${d.rate.toFixed(3)}</td><td class="num"><strong>${d.required.toFixed(3)}</strong></td></tr>`).join('')}</tbody></table></div>`;
 }
-function clearFilters(){document.getElementById('fSearch').value='';['msFStage','msFMaterial','msFMachine'].forEach(id=>{MS_STATE[id].clear();updateMSLabel(id)});renderDetail()}
+function clearFilters(){['fSearch','fStage','fMaterial','fMachine'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});renderDetail()}
 
 function renderWarns(){const el=document.getElementById('warnOut');if(!S.warns.length){el.innerHTML='<div class="empty"><span class="icon">✅</span>No warnings</div>';return}el.innerHTML=S.warns.map(w=>`<div class="warn ${w.level}"><span class="ico">${w.level==='error'?'✕':'!'}</span><span>${esc(w.msg)}</span></div>`).join('')}
 
 /* PRINT HELPERS */
 const TAB_NAMES={setup:'BOM Setup',plan:'Planning',stages:'Stage Filter',total:'Daily Total',detail:'Per-Row Detail',warns:'Warnings'};
+const PRINT_SUBTITLES={total:'Total Material wise requirement'};
 function updatePrintHeader(){
+  const active=document.querySelector('.tab.active');
+  const subtitle=active?(PRINT_SUBTITLES[active.id]||TAB_NAMES[active.id]||active.id):'';
   const user=document.getElementById('userChip').textContent||'';
   const now=new Date();
-  // Top-right: date + time (next line to the title)
-  document.getElementById('phSub').textContent=now.toLocaleDateString()+' '+now.toLocaleTimeString();
-  // Footer: keep user only (date now lives top-right)
-  const pfDate=document.getElementById('pfDate');
-  if(pfDate)pfDate.textContent='';
+  document.getElementById('phSub').textContent=subtitle;
+  document.getElementById('pfDate').textContent=now.toLocaleDateString()+' '+now.toLocaleTimeString();
   document.getElementById('pfUser').textContent=user?'User: '+user:'';
 }
 function printPage(){updatePrintHeader();window.print()}
