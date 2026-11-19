@@ -446,11 +446,25 @@ function setMSOptions(id, options, currentVals) {
   });
   updateMSHeader(id, options.length);
 }
-function updateMSHeader(id, total) {
+
+function updateMSHeader(id) {
   const header = document.getElementById(id).querySelector('.ms-header');
   const checked = getMSValues(id);
+  
+  // Default labels to prevent the "maerials" spelling bug
+  const labels = {
+    'ms-tStage': 'stages',
+    'ms-tMachine': 'machines',
+    'ms-tJob': 'jobs',
+    'ms-fMachine': 'machines',
+    'ms-fMaterial': 'materials',
+    'ms-fStage': 'stages'
+  };
+  
+  const defLabel = labels[id] || 'items';
+
   if (checked.length === 0) {
-    header.textContent = 'All ' + id.split('-')[1].replace('t','').replace('f','').toLowerCase() + 's ▼';
+    header.textContent = 'All ' + defLabel + ' ▼';
   } else {
     header.textContent = checked.length + ' selected ▼';
   }
