@@ -141,15 +141,12 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 .print-header{display:none}
 .print-footer{display:none}
 .col-codes{display:none}
-.col-jobs-print{display:none}
 
 /* ── PRINT: exact A4 portrait ───────────────────────────── */
 @page { size: A4 portrait; margin: 10mm; }
 
 @media print{
-  header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar,.empty,.print-header{display:none!important}
-  #total.tab.active h2{display:block!important;font-size:15px;font-weight:600;margin-bottom:8px;color:#000}
-  .tab:not(#total) h2{display:none!important}
+  header,nav,.no-print,.drop-zone,.hint,.grid-toolbar,details,.filter-bar,h2,.empty{display:none!important}
   body{background:#fff;font-size:9px}
   main{padding:0;width:100%}
   .card{box-shadow:none;border:none;padding:0;margin:0}
@@ -167,6 +164,10 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 
   .table-wrap{max-height:none;overflow:visible;border:none}
 
+  .print-header{display:block;text-align:center;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid #000}
+  .print-header .ph-title{font-size:16px;font-weight:700;color:#000}
+  .print-header .ph-sub{font-size:10px;color:#333;margin-top:2px}
+
   .print-footer{
     display:flex;justify-content:space-between;
     position:fixed;bottom:0;left:0;right:0;
@@ -176,7 +177,6 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 
   .col-jobs{display:none!important}
   .col-codes{display:table-cell!important}
-  .col-jobs-print{display:table-cell!important}
 }
 
 /* ── OFFLINE BANNER ─────────────────────────────── */
@@ -298,7 +298,7 @@ textarea:focus{outline:none;border-color:var(--ac);background:#fff;box-shadow:0 
 
 <section id="total" class="tab">
 <div class="card">
-  <h2>BOM Requirement</h2>
+  <h2>Daily Total BOM</h2>
   <p class="hint">Aggregated per material. Filters recompute totals live.</p>
   <div class="filter-bar no-print">
     <span class="flabel">Filter</span>
@@ -475,11 +475,11 @@ function nStage(s){return(s||'').toString().toLowerCase().replace(/\s+/g,' ').tr
 function parseTSVLine(line){if(line.includes('\t'))return line.split('\t');const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'&&line[i+1]==='"'){cur+='"';i++}else if(c==='"')q=false;else cur+=c}else{if(c==='"')q=true;else if(c===','){out.push(cur);cur=''}else cur+=c}}out.push(cur);return out.map(fixEncoding)}
 function parseDelim(txt){const lines=txt.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return[];const sep=lines[0].includes('\t')?'\t':',';return lines.map(l=>sep===','?parseTSVLine(l):l.split('\t').map(fixEncoding))}
 
-const DEFAULT_SYNONYMS={'nylon':['nylon','polyamide'],'polyamide':['nylon','polyamide'],'zerohalogen':['zerohalogen','zerohalogen compound','zero halogen','zhfr','lszh','lsfh','halogen free','ZEROHALOGEN COMPOUND'],'zhfr':['zerohalogen','zero halogen','zhfr','lszh','halogen free','low smoke'],'lszh':['zerohalogen','zero halogen','zhfr','lszh','halogen free','low smoke'],'hdpe':['hdpe','high density poly','high density polyethylene'],'xlpe':['xlpe','cross-linked poly','crosslinked polyethylene','xlp'],'pvc':['pvc','polyvinyl chloride'],'pe':['pe','polyethylene'],'polyethylene':['pe','polyethylene'],'aluminium':['aluminium','aluminum'],'aluminum':['aluminium','aluminum'],'copper':['copper','cu'],'steel':['steel','galvanised','galvanized','gi wire'],'galvanised':['steel','galvanised','galvanized'],'galvanized':['steel','galvanised','galvanized'],'polyester':['polyester','polyster'],'polyster':['polyester','polyster'],'tin':['tin'],'fr':['fr','frls','flame retardant'],'frls':['fr','frls','flame retardant'],'lsfh':['lsfh','lszh','zerohalogen','halogen free']};
+const DEFAULT_SYNONYMS={'nylon':['nylon','polyamide'],'polyamide':['nylon','polyamide'],'zerohalogen':['zerohalogen','zero halogen','zhfr','lszh','lsfh','halogen free','ZEROHALOGEN COMPOUND'],'zhfr':['zerohalogen','zero halogen','zhfr','lszh','halogen free','low smoke'],'lszh':['zerohalogen','zero halogen','zhfr','lszh','halogen free','low smoke'],'hdpe':['hdpe','high density poly','high density polyethylene'],'xlpe':['xlpe','cross-linked poly','crosslinked polyethylene','xlp'],'pvc':['pvc','polyvinyl chloride'],'pe':['pe','polyethylene'],'polyethylene':['pe','polyethylene'],'aluminium':['aluminium','aluminum'],'aluminum':['aluminium','aluminum'],'copper':['copper','cu'],'steel':['steel','galvanised','galvanized','gi wire'],'galvanised':['steel','galvanised','galvanized'],'galvanized':['steel','galvanised','galvanized'],'polyester':['polyester','polyster'],'polyster':['polyester','polyster'],'tin':['tin'],'fr':['fr','frls','flame retardant'],'frls':['fr','frls','flame retardant'],'lsfh':['lsfh','lszh','zerohalogen','halogen free']};
 let SYNONYMS=JSON.parse(localStorage.getItem('bomreq.synonyms')||'null')||{...DEFAULT_SYNONYMS};
 function expandSynonyms(mat){const key=(mat||'').toString().toLowerCase().trim();return(SYNONYMS[key]||[key]).map(s=>s.toLowerCase()).filter(Boolean)}
 function matchesMaterial(bomMat,syns){const hay=(bomMat||'').toString().toLowerCase();return syns.some(s=>hay.includes(s))}
-function isZeroHalogenSyns(syns){return syns.some(s=>['zerohalogen','zerohalogen compound','zero halogen','zhfr','lszh','lsfh','halogen free','ZEROHALOGEN COMPOUND'].some(z=>s.includes(z)))}
+function isZeroHalogenSyns(syns){return syns.some(s=>['zerohalogen','zero halogen','zhfr','lszh','lsfh','halogen free','ZEROHALOGEN COMPOUND'].some(z=>s.includes(z)))}
 function isHDPEMaterial(mat){if(!mat||!mat.trim())return false;const syns=expandSynonyms(mat);const g=SYNONYMS['hdpe']||['hdpe','high density poly'];return syns.some(s=>g.some(h=>s===h||s.includes(h)))}
 
 function isInnerFamilyStage(s){return /^inner\s*sheath/i.test(s)||/^additional\s*inner\s*sheath/i.test(s)||/^2nd?\s*(additional\s*)?inner\s*sheath/i.test(s)||/^inner\s*sheath\s*\d/i.test(s)||/^armou?r\s*bedding/i.test(s)}
@@ -679,7 +679,7 @@ function renderTotal(){
   const rows=getFilteredForTotal(),agg=aggregate(rows);
   document.getElementById('tCount').textContent=`${agg.length} material${agg.length===1?'':'s'} · ${rows.length} detail rows`;
   if(!agg.length){el.innerHTML='<div class="empty"><span class="icon">🔍</span>No materials match filters</div>';return}
-  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th class="col-jobs">Jobs</th><th class="col-codes">Material Code</th><th>Stages</th><th class="col-jobs-print">Jobs</th></tr></thead><tbody>${agg.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td class="col-jobs">${esc(t.jobs)}</td><td class="col-codes">${esc(t.codes)||'—'}</td><td>${esc(t.stages)}</td><td class="col-jobs-print">${esc(t.jobs)||'—'}</td></tr>`).join('')}</tbody></table></div>`;
+  el.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Colour</th><th style="text-align:right">Total Qty (kg)</th><th class="col-jobs">Jobs</th><th class="col-codes">Material Code</th><th>Stages</th></tr></thead><tbody>${agg.map(t=>`<tr><td>${esc(t.material)}</td><td>${esc(t.colour)||'—'}</td><td class="num">${t.qty.toFixed(3)}</td><td class="col-jobs">${esc(t.jobs)}</td><td class="col-codes">${esc(t.codes)||'—'}</td><td>${esc(t.stages)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function clearTotalFilters(){
   document.getElementById('tSearch').value='';
